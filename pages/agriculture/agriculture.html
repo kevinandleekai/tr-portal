@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/main.css"/>
+  <title></title>
+</head>
+<body>
+   	<div class="wrap">
+    	<div class="agriculture">
+    			<div class="agri-title"><h2>农业技术</h2></div>
+    			<div class="agri-list-wrap">
+		    		<ul class="agri-list">
+		    				<li class="agri-item">
+		    					水稻旱育浅植栽培技术
+		    				</li>
+		    				<li class="agri-item">
+		    					水稻抛秧栽培技术
+		    				</li>
+		    				<li class="agri-item">
+		    					水稻超高产精确栽培技术
+		    				</li>
+		    				<li class="agri-item">
+		    					水稻机械化插秧技术
+		    				</li>
+		    				<li class="agri-item">
+		    					玉米育苗移栽技术
+		    				</li>
+		    				<li class="agri-item">
+		    					小麦高产栽培技术
+		    				</li>
+		    				<li class="agri-item">
+		    					脱毒马铃薯高产栽培技术
+		    				</li>
+		    				<li class="agri-item">
+		    					稻田马铃薯稻草全程覆盖免耕栽培技术
+		    				</li>
+		    		</ul>
+	    		</div>
+    	</div>	
+   	</div>
+    <script src="../libs/keyDefine.js"></script>
+    <script src="../libs/global2.0.js"></script>
+    <script src="../libs/JAlex.js"></script>
+    <script src="../libs/GKey.js"></script>
+    <script src="../libs/operate.js"></script>
+    <script type="text/javascript">
+			var agriItem = getOptObj("agri-item", {
+					borderColor: "#f90"
+			});
+			
+			var agriItemComponent = new Mypage(agriItem);
+			
+			agriItemComponent.left = function() {
+
+			};
+      agriItemComponent.right = function() {
+
+      };
+      agriItemComponent.up = function() {
+      	var self = this;
+      	if(0 < self.nowIndex && 8 > self.nowIndex) {
+      			self.blur();
+      			self.nowIndex--;
+      			self.focus();
+      	}
+      };
+      agriItemComponent.down = function() {
+      	var self = this;
+      	if(-1 < self.nowIndex && 7 > self.nowIndex) {
+      			self.blur();
+      			self.nowIndex++;
+      			self.focus();
+      	}
+      };
+      agriItemComponent.href = function() {
+         var self = this, nowIndex = self.nowIndex;
+         if (nowIndex == 0) {
+            location.href = "./agricultureDesc.html";
+         }
+      };
+      
+      agriItemComponent.listen();
+      
+      page.regedit(agriItemComponent);
+      
+      (function(){
+      	agriItemComponent.init();
+      })();
+      //视频播放
+      Video.stop();
+    </script>
+
+</body>
+</html>

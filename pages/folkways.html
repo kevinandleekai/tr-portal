@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/main.css"/>
+  <title></title>
+</head>
+<body>
+   	<div class="wrap">
+    	<div class="folkways">
+    		<div class="container">
+    			<ul	class="folkways-sum-list">
+    				<li class="folkways-sum-item">
+    					<img src="../imgs/scenic-1.jpg"
+    				</li>
+    				<li class="folkways-sum-item">
+    					<img src="../imgs/scenic-2.jpg"
+    				</li>
+    				<li class="folkways-sum-item">
+    					<img src="../imgs/scenic-3.jpg"
+    				</li>
+    				<li class="folkways-sum-item">
+    					<img src="../imgs/scenic-4.jpg"
+    				</li>
+    				<li class="folkways-sum-item">
+    					<img src="../imgs/scenic-5.jpg"
+    				</li>
+    			</ul>
+    		</div>
+    		<div class="prev" id="prev"></div>
+				<div class="next" id="next"></div>
+				<div id="page" class="page"></div>
+    	</div>		
+   	</div>
+    <script src="../libs/keyDefine.js"></script>
+    <script src="../libs/global2.0.js"></script>
+    <script src="../libs/JAlex.js"></script>
+    <script src="../libs/GKey.js"></script>
+    <script src="../libs/operate.js"></script>
+    <script type="text/javascript">
+			//焦点轮播图
+			/* 
+		 * Slider constructor 
+		 * @param {Node} ele 容器节点 
+		 * @param {Int} index 默认显示第几张 
+		 */
+	(function(con){
+		var Slider = function(ele) {
+			this.ele = ele;
+			this.oList = ele.children[0];
+			this.items = this.oList.getElementsByTagName("li");
+			this.itemWidth = parseInt(this.items[0].offsetWidth, 10);
+			this.page = document.getElementById("page");
+			this.prevBtn = document.getElementById("prev");
+			this.nextBtn = document.getElementById("next");
+			this.init();
+		};
+		Slider.prototype = {
+			constructor : Slider,
+			init : function() {
+				this.oList.style.position = 'absolute';
+				this.oList.style.top = 0;
+				this.oList.style.left = 0;
+
+				this.going = 0;
+				this.current = 1;
+				this.speed = 100;
+				this.timer = null;
+				this.wrapWidth = parseInt(this.ele.offsetWidth, 10);
+				this.pageCircles = null;
+
+				this.prevBtn.style.marginLeft = -this.itemWidth / 2 + 'px';
+				this.nextBtn.style.marginRight = -this.itemWidth / 2 + 'px';
+
+				if (this.items.length > 2) {
+					this.setUp();
+				} else {
+					this.oList.style.left = (this.wrapWidth - this.itemWidth
+							* this.items.length)
+							/ 2 + 'px';
+					this.prevBtn.style.display = "none";
+					this.nextBtn.style.display = "none";
+				}
+
+				this.oList.style.width = this.itemWidth * this.items.length
+						+ 'px';
+
+			},
+			setUp : function() {
+				var first1 = this.items[0].cloneNode();
+				first1.innerHTML = this.items[0].innerHTML;
+
+				first2 = this.items[1].cloneNode();
+				first2.innerHTML = this.items[1].innerHTML;
+
+				last1 = this.items[this.items.length - 1].cloneNode();
+				last1.innerHTML = this.items[this.items.length - 1].innerHTML;
+
+				last2 = this.items[this.items.length - 2].cloneNode();
+				last2.innerHTML = this.items[this.items.length - 2].innerHTML;
+
+				this.oList.appendChild(first1);
+				this.oList.appendChild(first2);
+				this.oList.insertBefore(last1, this.items[0]);
+				this.oList.insertBefore(last2, this.items[0]);
+
+				this.buildPage();
+				this.bindEvent();
+				this.slientGoTo();
+			},
+			buildPage : function() {
+				for (var i = 0, len = this.items.length - 4; i < len; i++) {
+					var circle = document.createElement('span');
+					circle.innerHTML = i + 1;
+					this.page.appendChild(circle);
+				}
+				this.pageCircles = this.page.getElementsByTagName('span');
+				this.addEvent(this.page, 'click', 'gotoIndex');
+				this.page.style.display = 'block';
+			},
+			bindEvent : function() {
+				this.addEvent(this.prevBtn, 'click', 'prev');
+				this.addEvent(this.nextBtn, 'click', 'next');
+			},
+			addEvent : function(ele, type, fn, context) {
+				context = context || this;
+				var innerFun = function(event) {
+					var evt = event || window.event;
+					if (typeof fn === 'string') {
+						context[fn].call(context, this, evt);
+					} else {
+						fn.call(context, this, evt);
+					}
+				}
+				if (window.addEventListener) {
+					ele.addEventListener(type, innerFun, false);
+				} else {
+					ele.attachEvent('on' + type, innerFun);
+				}
+			},
+			index : function(ele) {
+				var parentNode = ele.parentNode;
+				var eles = parentNode.getElementsByTagName(ele.tagName);
+
+				for (var i = 0, len = eles.length; i < len; i++) {
+					if (eles[i] == ele) {
+						return i;
+					}
+				}
+			},
+			hasClass : function(obj, cls) {
+				return !!obj.className
+						&& obj.className.match(new RegExp('(\\s|^)' + cls
+								+ '(\\s|$)'));
+			},
+			addClass : function(obj, cls) {
+				if (!this.hasClass(obj, cls))
+					obj.className += " " + cls;
+			},
+			removeClass : function(obj, cls) {
+				if (this.hasClass(obj, cls)) {
+					var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+					obj.className = obj.className.replace(reg, ' ');
+				}
+			},
+			gotoIndex : function(eleContext, evt) {
+				var ele = evt.target || evt.srcElement;
+				var index = this.index(ele);
+				if (this.current === this.items.length - 4 && index === 0) {
+					this.current = 0;
+					this.slientGoTo();
+				} else if (this.current === 1
+						&& index === this.items.length - 5) {
+					this.current = this.items.length - 3;
+					this.slientGoTo();
+				}
+				this.current = index + 1;
+				this.doAnimate();
+			},
+			prev : function(eleContext, evt) {
+				this.current--;
+				this.doAnimate();
+			},
+			next : function(eleContext, evt) {
+				this.current++;
+				this.doAnimate();
+			},
+			doAnimate : function() {
+				this.distance = (this.wrapWidth - this.itemWidth
+						* (2 * this.current + 3))
+						/ 2 - parseInt(this.oList.style.left, 10);
+				if (this.distance < 0) {
+					this.speed = -Math.abs(this.speed);
+				} else {
+					this.speed = Math.abs(this.speed);
+				}
+				this.distance = Math.abs(this.distance);
+				this.animate();
+			},
+			animate : function() {
+				var that = this;
+				this.timer = setTimeout(function() {
+					var left = parseInt(that.oList.style.left, 10) || 0;
+
+					if (that.going + Math.abs(that.speed) >= that.distance) {
+						if (that.speed > 0) {
+							that.oList.style.left = left + that.distance
+									- that.going + 'px';
+						} else {
+							that.oList.style.left = left - that.distance
+									+ that.going + 'px';
+						}
+						clearTimeout(that.timer);
+						that.going = 0;
+						that.onceEnd();
+					} else {
+						that.going += Math.abs(that.speed);
+						that.oList.style.left = left + that.speed + 'px';
+						that.animate();
+					}
+				}, 25);
+
+			},
+			slientGoTo : function() {
+				console.log(this.current);
+				this.oList.style.left = (this.wrapWidth - this.itemWidth
+						* (2 * this.current + 3))
+						/ 2 + 'px';
+			},
+			setCircleSelect : function() {
+				for (var i = 0, len = this.pageCircles.length; i < len; i++) {
+					var ele = this.pageCircles[i];
+					if (this.hasClass(ele, 'select')) {
+						this.removeClass(ele, 'select');
+					}
+				}
+				this.addClass(this.pageCircles[this.current - 1], 'select');
+			},
+			correctCurrent : function() {
+				if (this.current === 0) {
+					this.current = this.items.length - 4;
+				} else if (this.current === this.items.length - 3) {
+					this.current = 1;
+				} else {
+					return false;
+				}
+				this.slientGoTo();
+			},
+			onceEnd : function() {
+				this.correctCurrent();
+				this.setCircleSelect();
+			}
+		};
+		var s = new Slider(con);	
+	})(document.getElementsByClassName("container")[0]);
+      //视频播放
+      Video.stop();
+    </script>
+
+</body>
+</html>
