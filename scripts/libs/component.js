@@ -96,7 +96,8 @@ define(['util', 'JAlex', 'keyDefine'], function(util, JAlex, keyDefine){
                 }
             };
         },
-        // handleRight, handleLeft, handleUp, handleDown只能做到一部分代码通用但是又不能少
+        // handleRight, handleLeft, handleUp, handleDown 能够做到一部分通用
+        // 主要在于每个实例的上下左右逻辑大部分都不一样
         // 所以这也是为什么不在listen方法里面去调用的原因
         handleRight: function(callback) {
             var self = this;
