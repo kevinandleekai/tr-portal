@@ -72,36 +72,10 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
          nodes: getByClass('navbar-item', domNode),
          css: {color: '#f00'},
          right: function() {
-              var self = this;
-              if (self.nowIndex < self.itemSize - 1) {
-                self.blur();
-                self.nowIndex ++;
-                self.focus();
-                var serviceList = GLOBAL_CONFIG.serviceList,
-                    regTxt = 'service-list-active';
-                for (var i = 0; i < serviceList.length; i++) {
-                    var className = serviceList[i].className;
-                    className = className.replace(regTxt, '');
-                    serviceList[i].className = className;
-                }
-                serviceList[this.nowIndex].className = className + ' ' + regTxt;
-             }
+             this.handleRight(tab);
          },
          left: function() {
-            var self = this;
-             if (self.nowIndex > 0) {
-                self.blur();
-                self.nowIndex --;
-                self.focus();
-                var serviceList = GLOBAL_CONFIG.serviceList,
-                    regTxt = 'service-list-active';
-                for (var i = 0; i < serviceList.length; i++) {
-                    var className = serviceList[i].className;
-                    className = className.replace(regTxt, '');
-                    serviceList[i].className = className;
-                }
-                serviceList[this.nowIndex].className = className + ' ' + regTxt;
-             }
+             this.handleLeft(tab);
          },
          down: function() {
           var self = this, nowIndex = self.nowIndex;
@@ -151,7 +125,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
         }
       };
       navbarCompt = createObjFactory(config);
-      navbarCompt.init();
+      navbarCompt.init(4);
   }
   //电视政务DOM
   function tvgoverHtml(data, domNode) {
@@ -182,12 +156,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         right: function() {
-             var self = this;
-             if (self.nowIndex < self.itemSize - 1) {
-                self.blur();
-                self.nowIndex ++;
-                self.focus();
-             }
+            this.handleRight();
         },
         down: function() {
             var self = this,
@@ -202,12 +171,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         left: function() {
-           var self = this;
-           if (self.nowIndex > 0) {
-              self.blur();
-              self.nowIndex --;
-              self.focus();
-           }
+           this.handleLeft();
         },
         href: function() {
             var self = this,
@@ -258,12 +222,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         right: function() {
-             var self = this;
-             if (self.nowIndex < self.itemSize - 1) {
-                self.blur();
-                self.nowIndex ++;
-                self.focus();
-             }
+            this.handleRight();
         },
         down: function() {
              var self = this,
@@ -278,12 +237,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
              }
         },
         left: function() {
-           var self = this;
-           if (self.nowIndex > 0) {
-              self.blur();
-              self.nowIndex --;
-              self.focus();
-           }
+           this.handleLeft();
         },
         href: function() {
              var self = this,
@@ -342,12 +296,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         right: function() {
-           var self = this;
-           if (self.nowIndex < self.itemSize - 1) {
-              self.blur();
-              self.nowIndex ++;
-              self.focus();
-           }
+           this.handleRight();
         },
         down: function() {
             var self = this;
@@ -358,12 +307,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
             }
         },
         left: function() {
-           var self = this;
-           if (self.nowIndex > 0) {
-              self.blur();
-              self.nowIndex --;
-              self.focus();
-           }
+           this.handleLeft();
         },
         href: function() {
              var self = this;
@@ -442,7 +386,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         down: function() {
-                var self = this,
+              var self = this,
                nowIndex = self.nowIndex,
                size = self.itemSize;
            if (nowIndex == 0) {
@@ -457,12 +401,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         left: function() {
-           var self = this;
-           if (self.nowIndex > 0) {
-              self.blur();
-              self.nowIndex --;
-              self.focus();
-           }
+           this.handleLeft();
         },
      });
   }
@@ -495,12 +434,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         right: function() {
-           var self = this;
-           if (self.nowIndex < self.itemSize - 1) {
-              self.blur();
-              self.nowIndex ++;
-              self.focus();
-           }
+           this.handleRight();
         },
         down: function() {
            var self = this,
@@ -515,12 +449,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         left: function() {
-            var self = this;
-           if (self.nowIndex > 0) {
-              self.blur();
-              self.nowIndex --;
-              self.focus();
-           }
+           this.handleLeft();
         },
         href: function() {
             var self = this;
@@ -571,12 +500,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         right: function() {
-           var self = this;
-           if (self.nowIndex < self.itemSize - 1) {
-              self.blur();
-              self.nowIndex ++;
-              self.focus();
-           }
+           this.handleRight();
         },
         down: function() {
            var self = this;
@@ -587,12 +511,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         left: function() {
-           var self = this;
-           if (self.nowIndex > 0) {
-              self.blur();
-              self.nowIndex --;
-              self.focus();
-           }
+           this.handleLeft();
         }
     });
   }
@@ -628,12 +547,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
              }
         },
         right: function() {
-           var self = this;
-           if (self.nowIndex < self.itemSize - 1) {
-              self.blur();
-              self.nowIndex ++;
-              self.focus();
-           }
+           this.handleRight();
         },
         down: function() {
             var self = this;
@@ -644,16 +558,24 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            }
         },
         left: function() {
-             var self = this;
-             if (self.nowIndex > 0) {
-                self.blur();
-                self.nowIndex --;
-                self.focus();
-             }
+            this.handleLeft();
         }
     });
   }
+  /**
+  ***  tab切换
+  **/
+  function tab() {
+      var serviceList = GLOBAL_CONFIG.serviceList,
+          regTxt = 'service-list-active';
+      for (var i = 0; i < serviceList.length; i++) {
+          var className = serviceList[i].className;
+          className = className.replace(regTxt, '');
+          serviceList[i].className = className;
+      }
+      serviceList[this.nowIndex].className = className + ' ' + regTxt;
+  }
+
   // 页面初始化开始
   ajax(GLOBAL_CONFIG.pageInitParam);
-
-})
+});

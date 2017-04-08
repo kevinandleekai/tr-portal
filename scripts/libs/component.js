@@ -95,6 +95,48 @@ define(['util', 'JAlex', 'keyDefine'], function(util, JAlex, keyDefine){
                     }
                 }
             };
+        },
+        // handleRight, handleLeft, handleUp, handleDown只能做到一部分代码通用但是又不能少
+        // 所以这也是为什么不在listen方法里面去调用的原因
+        handleRight: function(callback) {
+            var self = this;
+            if (self.nowIndex < self.itemSize - 1) {
+                self.blur();
+                self.nowIndex ++;
+                self.focus();
+                callback && callback.call(self);
+            }
+        },
+        handleLeft: function(callback) {
+            var self = this;
+            if (self.nowIndex > 0) {
+                self.blur();
+                self.nowIndex --;
+                self.focus();
+                callback && callback.call(self);
+            }
+        },
+        handleUp: function() {
+            var self = this;
+            if (self.nowIndex > 0) {
+                self.blur();
+                self.nowIndex --;
+                self.focus();
+            }
+        },
+        handleDown: function(component) {
+            var self = this;
+            if (self.nowIndex < self.itemSize - 1) {
+                self.blur();
+                self.nowIndex ++;
+                self.focus();
+            } else {
+               if (component) {
+                   self.blur();
+                   self.showHighLight = false;
+                   component.show();
+               }
+            }
         }
     };
 

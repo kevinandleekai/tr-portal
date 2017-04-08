@@ -2,7 +2,7 @@ require.config({
    baseUrl: '../../scripts/libs'
 });
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
-	    keyDefine = keyDefine;
+        keyDefine = keyDefine;
       global = keyDefine ;
       JAlex = JAlex;
       GKey = GKey;
@@ -51,30 +51,30 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
 
       // 页面DOM结构渲染
       function render(data, domNode) {
-          domNode = domNode || getByClass('focus-main');
-          var tpl = '<div class="focus-cont">{{pageContent}}</div>';
+          domNode = domNode || getByClass('affairs-main');
+          var tpl = '<div class="affairs-cont">{{pageContent}}</div>';
           // 构建DOM结构
           createHtmlFactory(tpl, data, domNode);
       }
 
       // 组件参数配置
-	  var config = {
-    	   nodes: getByClass('pagenation-btn'),
+      var config = {
+           nodes: getByClass('pagenation-btn'),
          css: {backgroundColor: '#f60'},
          right: function() {
-         	  this.handleRight();
+             this.handleRight();
          },
          left: function() {
-         	  this.handleLeft();
+             this.handleLeft();
          },
          href: function() {
-         	  history.go(-1);
+             history.go(-1);
          }
-	  };
-	  var pageNationCompt = null;
-	  // 创建组件
-	  pageNationCompt = createObjFactory(config);
-	  pageNationCompt.init(1);
+      };
+      var pageNationCompt = null;
+      // 创建组件
+      pageNationCompt = createObjFactory(config);
+      pageNationCompt.init(1);
 
     // 页面初始化
     ajax(GLOBAL_CONFIG.pageInitParam);

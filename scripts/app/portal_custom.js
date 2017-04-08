@@ -1,26 +1,6 @@
-/**
- * -.baseUrl: 所有模块查找的根路径
- * 二.当加载纯.js文件(依赖字串以/开头，或者以.js结尾，或者含有协议)，不会使用baseUrl。
- * 三. 如未显式设置baseUrl，则默认值是加载require.js的HTML所处的位置。如果用了data-main属性，则该路径就变成baseUrl
- * 四. path映射那些不直接放置于baseUrl下的模块名。设置path时起始位置是相对于baseUrl的，除非该path设置以"/"开头或含有URL协议（如http:）。
- */
-
-/*require.config({
-  baseUrl: '/libs/public',
-  paths: {
-    'keyDefine': 'keyDefine',
-    'global': 'global',
-    'JAlex': 'JAlex',
-    'GKey': 'GKey',
-    'myajax': 'myajax',
-    'util': 'util',
-    'component': 'component'
-  }
-});*/
 require.config({
    baseUrl: '../../scripts/libs'
 });
-
 
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
       util = util;
@@ -119,7 +99,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
           var dotBtns = dotGroup.children;
 
           myComponent.init();
-          slider.init();
+          slider.init(4);
       }
       pageInit();
 });

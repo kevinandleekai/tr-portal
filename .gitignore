@@ -1,4 +1,4 @@
-# ignore some director or files
+# ignore some directors or files
 node_modules
 testData
 imgs

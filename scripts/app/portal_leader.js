@@ -4,7 +4,7 @@ require.config({
 
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
       keyDefine = keyDefine;
-      global = keyDefine ;
+      global = keyDefine;
       JAlex = JAlex;
       GKey = GKey;
       myajax = myajax;
@@ -60,20 +60,10 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       		  nodes: getByClass('pagenation-btn'),
           	css: {backgroundColor: '#f60'},
   	        right: function() {
-  	        	var self = this;
-  		        if (self.nowIndex < self.itemSize - 1) {
-  		            self.blur();
-  		            self.nowIndex ++;
-  		            self.focus();
-  		        }
+  	        	 this.handleRight();
   	        },
   	        left: function() {
-  	        	var self = this;
-  		        if (self.nowIndex > 0) {
-  		            self.blur();
-  		            self.nowIndex --;
-  		            self.focus();
-  		        }
+  	        	 this.handleLeft();
   	        },
   	        href: function() {
   	        	history.go(-1);
@@ -83,7 +73,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
     		 var pageNationCompt = null;
        		//创建组件
          pageNationCompt = createObjFactory(config);
-         pageNationCompt.init(0);
+         pageNationCompt.init(1);
       }
 
       // 页面初始操作

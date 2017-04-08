@@ -112,7 +112,7 @@ $service-width: 300px;
    margin-bottom: 20px;
 }
 .main-video {
-   
+
    height: $main-height;
    position: absolute;
    width: 600px;
@@ -238,7 +238,7 @@ $service-width: 300px;
 .gallery {
    position: relative;
    height: 584px;
-   margin: 0 auto; 
+   margin: 0 auto;
 }
 .prev, .next {
    position: absolute;
@@ -450,7 +450,7 @@ $service-width: 300px;
         text-align: left;
         .scenic-desc-wrap {
             margin:20px;
-            padding:0px 20 0px 20px;        
+            padding:0px 20 0px 20px;
             .scenic-title {
                font-size: 20px;
                color: #cd7f3d;
@@ -547,7 +547,7 @@ $service-width: 300px;
             }
         }
     }
-    
+
 }
 
 .content{
@@ -585,13 +585,13 @@ $service-width: 300px;
         text-align: left;
         .content-desc-wrap {
             margin:20px;
-            padding:0px 20 0px 20px; 
+            padding:0px 20 0px 20px;
             p {
                 text-indent: 35px;
                 p {
                     text-indent: 70px
                 }
-            }       
+            }
             .content-classify {
                font-size: 20px;
                padding-bottom: 10px;
@@ -734,6 +734,7 @@ $service-width: 300px;
    height: 100%;
    float: right;
 }
+.affairs-main .affairs-cont,
 .focus-main .txt-list .txt-list-item, .river-main .txt-list .txt-list-item {
     padding-left: 20px;
     line-height:40px;
@@ -755,7 +756,7 @@ $service-width: 300px;
     background-color:#2a59a9;
     color: #fff;
 }
-// 调式框 
+// 调式框
 .debugger-mask {
    width: 400px;
    position: absolute;

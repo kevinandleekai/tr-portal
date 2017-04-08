@@ -1,9 +1,35 @@
-(function(window){
-	//视频播放
-      //Video.stop();
-      //页面配置参数
+require.config({
+   baseUrl: '../../scripts/libs'
+});
+
+require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
+      keyDefine = keyDefine;
+      global = keyDefine ;
+      JAlex = JAlex;
+      GKey = GKey;
+      myajax = myajax;
+      util = util;
+      component = component;
+
+
+      var SERVER_PATH = global.SERVER_PATH;
+
+      var createHtmlFactory =  component.createHtmlFactory;
+
+      var createObjFactory = component.createObjFactory;
+
       var reqPath = SERVER_PATH + 'GetPageList';
-      var url = '../testData/focusDesc.json';
+
+      var ajax = myajax.ajax;
+
+      var getByClass =  util.getByClass;
+      var getClientInfo = util.getClientInfo;
+      var getParam = util.getParam;
+
+      var reqPath = SERVER_PATH + 'GetPageList';
+      var url = '../../testData/focusDesc.json';
+
+      //页面配置参数
       var GLOBAL_CONFIG = {
           pageInitParam: {
              url: url,
@@ -21,10 +47,10 @@
              success: function(data) {
                  data = eval('('+ data +')');
                  render(data['pageList']);
-             } 
+             }
           }
       };
-      
+
 
       function render(data, domNode) {
           domNode = domNode || getByClass('river-main');
@@ -38,23 +64,13 @@
       	  nodes: getByClass('pagenation-btn'),
           css: {backgroundColor: '#f60'},
           right: function() {
-          	  var self = this;
-	          if (self.nowIndex < self.itemSize - 1) {
-	              self.blur();
-	              self.nowIndex ++;
-	              self.focus();
-	          }
+          	 this.handleRight();
           },
           left: function() {
-          	 var self = this;
-	          if (self.nowIndex > 0) {
-	              self.blur();
-	              self.nowIndex --;
-	              self.focus();
-	          }
+          	 this.handleLeft();
           },
           href: function() {
-          	  history.go(-1);
+          	 history.go(-1);
           }
       };
 
@@ -65,4 +81,4 @@
 
       // 页面初始化
       ajax(GLOBAL_CONFIG.pageInitParam);
-})(window);
+});

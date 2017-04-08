@@ -1,5 +1,5 @@
 require.config({
-   baseUrl: '../../scripts/libs',
+   baseUrl: '../../scripts/libs'
 });
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
       keyDefine = keyDefine;
@@ -60,34 +60,19 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
              css: {borderColor: '#f60'},
              oldStyle: {borderColor: "#110f7c"},
              up: function() {
-             	var self = this;
-	            if (self.nowIndex > 0) {
-	                self.blur();
-	                self.nowIndex --;
-	                self.focus();
-	            }
-	         },
-	         down: function() {
-	         	 var self = this;
-	             if (self.nowIndex < self.itemSize - 1) {
-	                self.blur();
-	                self.nowIndex ++;
-	                self.focus();
-	             } else {
-	                self.blur();
-	                self.showHighLight = false;
-	                pageNationCompt.show();
-	             }
-	         },
-	         href: function() {
-	         	var self = this,
+             	   this.handleUp();
+	           },
+  	         down: function() {
+  	         	   this.handleDown(pageNationCompt);
+  	         },
+  	         href: function() {
+  	         	   var self = this,
                  nowNode = self.aItems[self.nowIndex],
                  plateId = nowNode.getAttribute('data-plateid');
-	             if (plateId.length) {
-	                location.href = './focusDesc.html?plateId=' + plateId;
-	             }
-	         }
-
+  	             if (plateId.length) {
+  	                location.href = './focusDesc.html?plateId=' + plateId;
+  	             }
+  	         }
           };
           // 创建组件对象
           lstCompt = createObjFactory(config);
@@ -97,33 +82,23 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       	 nodes: getByClass('pagenation-btn'),
          css: {backgroundColor: '#f60'},
          up: function() {
-         	var self = this;
+         	  var self = this;
             if (lstCompt) {
-              self.blur();
-              self.showHighLight = false;
-              lstCompt.show();
+               self.blur();
+               self.showHighLight = false;
+               lstCompt.show();
             }
          },
          right: function() {
-         	var self = this;
-	        if (self.nowIndex < self.itemSize - 1) {
-              self.blur();
-              self.nowIndex ++;
-              self.focus();
-	        }
-	     },
-	     left: function() {
-	     	 var self = this;
-	         if (self.nowIndex > 0) {
-	            self.blur();
-	            self.nowIndex --;
-	            self.focus();
-	         }
-	     },
-	     href: function() {
-	     	 history.go(-1);
-	     }
-      }
+         	  this.handleRight();
+	       },
+  	     left: function() {
+  	     	  this.handleLeft();
+  	     },
+  	     href: function() {
+  	     	  history.go(-1);
+  	     }
+      };
       pageNationCompt = createObjFactory(config);
       pageNationCompt.init(1);
 
