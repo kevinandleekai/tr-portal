@@ -226,6 +226,48 @@ $service-width: 300px;
        }
     }
 
+    .service-item {
+       width: 180px;
+       height: 210px;
+       border: 5px solid #110f7c;
+       float: left;
+       margin-bottom: 10px;
+       overflow: hidden;
+       img {
+          display: block;
+          width: 100%;
+          height: 100%;
+       }
+    }
+    .service-elec {
+       width: 180px;
+       height: 210px;
+       border: 5px solid #110f7c;
+       margin-right: 10px;
+       margin-bottom: 10px;
+       overflow: hidden;
+       img {
+          display: block;
+          width: 100%;
+          height: 100%;
+       }
+    }
+
+    .service-elec-large {
+        width: 180px;
+        height: 440px;
+        border: 5px solid #110f7c;
+        float: right;
+        margin-right: 20px;
+        margin-bottom: 0;
+        overflow: hidden;
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+       }
+    }
+
 
 }
 /* end 中间主体部分 */

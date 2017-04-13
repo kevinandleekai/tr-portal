@@ -280,6 +280,16 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
     };
     ajax(config);
   }
+  function fnSeven(data) {
+    var config = {
+         url: data['href'],
+         method: 'get',
+         success: function(data) {
+            elecHtml(data);
+         }
+    };
+    ajax(config);
+  }
   //智慧乡村
   function ruralHtml(data, domNode) {
     domNode = domNode || GLOBAL_CONFIG.serviceList[1];
@@ -604,17 +614,14 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   // 电子商务
   function elecHtml(data, domNode) {
     domNode = domNode || GLOBAL_CONFIG.serviceList[6];
-    var tpl = '',
-        html = '';
-    for (var i = 0, len = data.length; i < len; i++) {
-        if (i > 0 && i < len - 1) {
-            tpl = '<div class="service-item-xs service-elec"><img src='+PIC_PATH+'{{columnCover}}></div>';
-        } else {
-            tpl = '<div class="service-item service-elec"><img src='+PIC_PATH+'{{columnCover}} alt=""></div>';
-        }
-        html += simpleTemplateEngine(tpl, data[i]);
+    domNode.innerHTML = data;
+
+    var nodes = domNode.children;
+    for (var i = 0, len = nodes.length; i < len; i++) {
+        var currNode = nodes[i],
+            oImg = currNode.getElementsByTagName('img')[0];
+        oImg.src = ALL_DATAS[5]['columnList'][i]['columnCover'];
     }
-    domNode.innerHTML = html;
 
     elecCompt = createObjFactory({
         nodes: getByClass('service-elec'),
