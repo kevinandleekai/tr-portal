@@ -1,5 +1,5 @@
 @charset "UTF-8";
-// clean css rest
+/* clean css rest */
 $color: #110f7c;
 $white: #fff;
 body {
@@ -32,9 +32,7 @@ a {text-decoration: none;}
 .clearfix:after {
    content: "";
    display: table;
-   line-height: 0;
-   font-size: 0;
-   visibility: hidden;
+   clear: both;
 }
 .w1000 {width: 1000px;}
 .wrap {
@@ -44,179 +42,195 @@ a {text-decoration: none;}
    margin-left: auto;
    margin-right: auto;
 }
-.wrap-padding{
-    display:block;
-    width:100%;
-    height:10px;
-}
-.top {
-   position: relative;
-   height: 96px;
-   overflow: hidden;
-   color: $white;
-}
-.top-imgbox {
-   margin-top: 19px;
-}
-.top-imgbox  * {
-   vertical-align: middle;
-}
-.top-imgbox > label {
-   font-size: 30px;
-   font-weight: 500;
-}
-.top-weatherbox {
-  position: absolute;
-  right: 137px;
-  top: 18px;
-  color: $white;
-}
-.top-weather-img, .top-weather-data {
-   display: inline-block;
-   vertical-align: middle;
-   font-size: 19px;
-}
-.nowtime {
-   position: absolute;
-   right: 10px;
-   top: 15px;
-   color: $white;
-}
-.nowtime .nowtime-time {
-   font-size: 25px;
-}
-//Head navigate
-.navbar {
-  overflow: hidden;margin-bottom: 10px;
-}
-.navbar-item {
-   float: left;
-   font-size: 25px;
-   line-height: 30px;
-   color: gray;
-   margin-left: 30px;
-   padding-bottom: 5px;
-   font-weight: 500;
-   border-bottom: 2px solid $color;
-}
-.navbar-item:first-child {
-   margin-left: 50;
+$top_height: 96px;
+$font_weight: 500;
+$font30: 30px;
+$white: #fff;
+/*头部*/
+.header {
+   padding-top: 10px;
+   padding-bottom: 10px;
+   .header-logo {
+       float: left;
+       img, label {
+          vertical-align: middle;
+       }
+       img {
+          width: 50px; height: 50px;margin-right: 5px;
+       }
+       label {
+          font-size: $font30;
+          font-weight: font_weight;
+          color: $white;
+       }
+   }
+
+   .header-weather {
+        position: absolute;
+        right: 137px;
+        color: $white;
+        width: 150px;
+        overflow: hidden;
+
+        img {
+            float: left;
+        }
+        .header-weather-detail {
+            padding-left: 60px;
+        }
+        .header-weather-village, .header-weather-data {
+            font-size: 19px;line-height: 19px;
+            padding-top: 3px;
+        }
+   }
+   .header-nowtime {
+       float: right;
+       color: $white;
+       .nowtime-time {
+          font-size: 20px;
+       }
+   }
 }
 
-//main body
+/* start 导航部分*/
+.navbar {
+   padding-bottom: 10px;
+   overflow: hidden;
+   .navbar-item {
+      float: left;
+      font-size: 25px;
+      height: 40px;
+      line-height: 40px;
+      color: gray;
+      padding-left: 20px;
+      padding-right: 20px;
+      font-weight: $font_weight;
+   }
+}
+/* end 导航部分*/
+
+/* start 中间主体部分 */
 $main-height: 450px;
 $service-width: 300px;
-.main {
+.middle {
    position: relative;
    height: $main-height;
    margin-bottom: 20px;
-}
-.main-video {
+   /* padding-left: 20px;
+   padding-right: 20px; */
+   .middle-video {
+      height: $main-height;
+      position: absolute;
+      width: 600px;
+      background: url(../imgs/index1.jpg) no-repeat;
+      background-size: 100% 100%;
+      margin-left: 40px;
+   }
+   .service-box {
+       float: right;
+       position: relative;
+       width: 400px;
+       overflow: hidden;
+   }
+   .service-list {
+       position: relative;
+       margin-right: -10px;
+       margin-bottom: -10px;
+       display: none;
+    }
+    .service-list-active {
+        display: block;
+    }
+    .service-item {
+       width: 180px;
+       height: 210px;
+       border: 5px solid #110f7c;
+       float: left;
+       margin-right: 10px;
+       margin-bottom: 10px;
+       overflow: hidden;
+       img {
+          display: block;
+          width: 100%;
+          height: 100%;
+       }
+    }
+    .service-item-sm {
+       width: 113px;
+       height: 134px;
+       margin-bottom: 10px;
+       margin-right: 10px;
+       border-width: 5px;
+       border-style: solid;
+       border-color: #110f7c;
+       float: left;
+       img {
+          display: block;
+          width: 100%;
+          height: 100%;
+       }
+    }
+    .service-item-md {
+       width: 180px;
+       height: 134px;
+       border: 5px solid transparent;
+       margin-bottom: 10px;
+       margin-bottom: 10px;
+       float: left;
+       img {
+          display: block;
+          width: 100%;
+          height: 100%;
+       }
+    }
+    .service-item-xs {
+       width: 175px;
+       height: 98%;
+       float: right;
+       margin-right: 48px;
+       border-width: 5px;
+       border-style: solid;
+       border-color: transparent;
+       img {
+         display: block;
+         width: 100%;
+         height: 100%;
+       }
+    }
+    .service-item-xd {
+       width: 246px;
+       height: 134px;
+       float: left;
+       margin-right: 10px;
+       margin-bottom: 10px;
+       border-width: 5px;
+       border-style: solid;
+       border-color: #110f7c;
+       img {
+          display: block;
+          width: 100%;
+          height: 100%;
+       }
+    }
+    .service-item-sb {
+       width: 113px;
+       height: 288px;
+       float: left;
+       border: 5px solid #110f7c;
+       margin-right: 10px;
+       margin-bottom: 10px;
+       img {
+            display: block;
+            width: 100%;
+            height: 100%;
+       }
+    }
 
-   height: $main-height;
-   position: absolute;
-   width: 600px;
-   background: url(../imgs/index1.jpg) no-repeat;
-   background-size: 100% 100%;
-   margin-left:76px;
-// text-align:center;
-}
-.service-box {
-   float: right;
-   width: $service-width + 126;
-   height: $main-height;
-   position: relative;
-   overflow: hidden;
-}
-.service-box .service-list {
-   position: relative;
-   margin-right: -10px;
-   margin-bottom: -10px;
-   height: 100%;
-   display: none;
-}
-.service-box .service-list-active {
-   display: block;
-}
-.service-item {
-   width: 179px;
-   height: 211px;
-   border-width: 5px;
-   border-style: solid;
-   border-color: #110f7c;
-   float: left;
-   margin-right: 10px;
-   margin-bottom: 10px;
-   img {
-     display: block;
-     width: 100%;
-     height: 100%;
-   }
-}
-.service-item-sm {
-   width: 113px;
-   height: 134px;
-   margin-bottom: 10px;
-   margin-right: 10px;
-   border-width: 5px;
-   border-style: solid;
-   border-color: #110f7c;
-   float: left;
-   img {
-      display: block;
-      width: 100%;
-      height: 100%;
-   }
-}
-.service-item-md {
-   border-width: 5px;
-   border-style: solid;
-   border-color: transparent;
-   height: 134px;
-   margin-bottom: 10px;
-   margin-bottom: 10px;
-   img {
-     display: block;
-     width: 100%;
-     height: 100%;
-   }
-}
-.service-item-xs {
-   width: 175px;
-   height: 98%;
-   float: right;
-   margin-right: 48px;
-   border-width: 5px;
-   border-style: solid;
-   border-color: transparent;
-   img {
-     display: block;
-     width: 100%;
-     height: 100%;
-   }
-}
-.service-item-xd {
-   width: 246px;
-   height: 134px;
-   float: left;
-   margin-right: 10px;
-   margin-bottom: 10px;
-   border-width: 5px;
-   border-style: solid;
-   border-color: #110f7c;
-   img {
-      display: block;
-      width: 100%;
-      height: 100%;
-   }
-}
 
-.footer {
-   color: $white;
-   font-size: 19px;
-   font-weight: 500;
-   margin-left: 70px;
 }
+/* end 中间主体部分 */
+
+
 .detail-title {
    color: $white;
    font-size: 25px;
@@ -686,7 +700,6 @@ $service-width: 300px;
 .page .select {
     background: #f00;
 }
-// 分页
 .pagenation {
    text-align: right;
    font-size: 0;
@@ -701,7 +714,6 @@ $service-width: 300px;
       border: 1px solid #fff;
    }
 }
-// 今日关注, 沿河要问, 政务公开
 .affairs-title, .focus-title, .river-title {
    color: #fff;
    padding: 40px 0 20px;
@@ -756,7 +768,6 @@ $service-width: 300px;
     background-color:#2a59a9;
     color: #fff;
 }
-// 调式框
 .debugger-mask {
    width: 400px;
    position: absolute;

@@ -23,4 +23,7 @@
 
 #### 便民服务
 - guide.html    办事指南
-- 
+-
+
+#### template文件夹
+- tpl_four.html       四个方格的模板

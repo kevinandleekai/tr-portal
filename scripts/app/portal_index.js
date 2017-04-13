@@ -6,7 +6,7 @@ require.config({
     baseUrl: './scripts/libs'
 });
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
-  var URL = './testData/index.json';
+  var URL = '../../testData/index.json';
   var getByClass = util.getByClass;
   var id = util.id;
   var ajax = myajax.ajax;
@@ -16,6 +16,10 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   var page = JAlex.page;
   var simpleTemplateEngine = util.simpleTemplateEngine;
 
+  var addClass = util.addClass;
+
+  var ALL_DATAS = null;    // 引用第一次请求时, 返回回来的所有数据。
+
   //全局页面配置参数
   var GLOBAL_CONFIG = {
       //页面初始化时, 请求参数
@@ -24,7 +28,9 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
          method: 'get',
          success: function(data) {
              data = eval('('+ data +')');
+             ALL_DATAS = data;
              render(data);
+             fnFirst(ALL_DATAS[0]);
          }
       },
 
@@ -47,14 +53,6 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   function render(data) {
       // 构建导航区域DOM结构
       navbarHtml(data, id("navbar"));
-      // 遍历数据进行DOM构建
-      for (var i = 0, len = data.length; i < len; i++) {
-          (function(i){
-              //alert(GLOBAL_CONFIG.rendHtmlList[i]);
-              // alert(data[i]["columnList"]);
-              GLOBAL_CONFIG.rendHtmlList[i](data[i]["columnList"]);
-          })(i);
-      }
   }
 
   // 这里分开这么多构建DOM方法,的恶心写法原因在于, 页面设计的恶心, 很多的DOM结构无法公用
@@ -62,6 +60,8 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   //导航菜单DOM
   function navbarHtml(data, domNode) {
       domNode = domNode || id("navbar");
+
+      // 定义对应的DOM字符串模板
       var tpl = '<li class="navbar-item">{{columnTitle}}</li>';
 
       //创建对应的DOM结构
@@ -72,7 +72,29 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
          nodes: getByClass('navbar-item', domNode),
          css: {color: '#f00'},
          right: function() {
-             this.handleRight(tab);
+             //this.handleRight(tab);
+             var self = this, nowIndex = self.nowIndex,
+                 list = GLOBAL_CONFIG.serviceList;
+
+             if (this.nowIndex < self.itemSize - 1) {
+                  self.blur();
+                  self.nowIndex ++;
+                  self.focus();
+                  tab.call(this);
+                  if (self.nowIndex === 1) {
+                      fnSecond(ALL_DATAS[1]);
+                  } else if (self.nowIndex === 2) {
+                      fnThird(ALL_DATAS[2]);
+                  } else if (self.nowIndex === 3) {
+                      fnFour(ALL_DATAS[3]);
+                  } else if (self.nowIndex === 4) {
+                      fnFive(ALL_DATAS[4]);
+                  } else if (self.nowIndex === 5) {
+                      fnSix(ALL_DATAS[5]);
+                  } else if (self.nowIndex === 6) {
+                      fnSeven(ALL_DATAS[6]);
+                  }
+             }
          },
          left: function() {
              this.handleLeft(tab);
@@ -125,84 +147,152 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
         }
       };
       navbarCompt = createObjFactory(config);
-      navbarCompt.init(4);
+      navbarCompt.init();
   }
-  //电视政务DOM
+// 电视政务
   function tvgoverHtml(data, domNode) {
-    domNode = domNode || GLOBAL_CONFIG.serviceList[0];
-    // 定义模板字符串
-    var tpl = '<div class="service-item service-gov" data-parentid={{columnId}}>' +
-                  '<img src='+PIC_PATH+'{{columnCover}}>' +
-              '</div>';
+      domNode = domNode || GLOBAL_CONFIG.serviceList[0];
 
-    //创建对应的DOM结构
-    createHtmlFactory(tpl, data, domNode);
-
-    var config = {
-        nodes: getByClass('service-gov', domNode),
-        css: {borderColor: '#f00'},
-        oldStyle: {borderColor: 'transparent'},
-        up: function() {
-           var self = this,
-           nowIndex = self.nowIndex;
-           if (nowIndex > 1) {
-              self.blur();
-              self.nowIndex = nowIndex - 2;
-              self.focus();
-           } else {
+      domNode.innerHTML = data;
+      var nodes = domNode.children;
+      for (var i = 0, len = nodes.length; i < len; i++) {
+          var currNode = nodes[i],
+              oImg = currNode.getElementsByTagName('img')[0];
+          addClass(currNode, 'service-gov');
+          oImg.src = ALL_DATAS[0]['columnList'][i]['columnCover'];
+      }
+      var config = {
+          nodes: getByClass('service-gov', domNode),
+          css: {borderColor: '#f00'},
+          oldStyle: {borderColor: 'transparent'},
+          up: function() {
+             var self = this,
+             nowIndex = self.nowIndex;
+             if (nowIndex > 1) {
+                self.blur();
+                self.nowIndex = nowIndex - 2;
+                self.focus();
+             } else {
+                self.blur();
+                self.showHighLight = false;
+                navbarCompt.show();
+             }
+          },
+          right: function() {
+              this.handleRight();
+          },
+          down: function() {
+              var self = this,
+              nowIndex = self.nowIndex,
+              size = self.itemSize;
+              if (size > 2) {
+                if (nowIndex < 2) {
+                    self.blur();
+                    self.nowIndex = nowIndex + 2;
+                    self.focus();
+                }
+             }
+          },
+          left: function() {
+             this.handleLeft();
+          },
+          href: function() {
+              var self = this,
+                  nowIndex = self.nowIndex,
+                  parentId = self.aItems[nowIndex].getAttribute('data-parentid');
               self.blur();
               self.showHighLight = false;
-              navbarCompt.show();
-           }
-        },
-        right: function() {
-            this.handleRight();
-        },
-        down: function() {
-            var self = this,
-            nowIndex = self.nowIndex,
-            size = self.itemSize;
-            if (size > 2) {
-              if (nowIndex < 2) {
-                  self.blur();
-                  self.nowIndex = nowIndex + 2;
-                  self.focus();
-              }
-           }
-        },
-        left: function() {
-           this.handleLeft();
-        },
-        href: function() {
-            var self = this,
-                nowIndex = self.nowIndex,
-                parentId = self.aItems[nowIndex].getAttribute('data-parentid');
-            self.blur();
-            self.showHighLight = false;
-           if (self.nowIndex == 0) {
-              location.href = '../../pages/tv/leader.html?parentId=' + parentId;
-              //location.href = './pages/test.html?parentId=' + parentId;
-           } else if (self.nowIndex == 1) {
-              location.href = '../../pages/tv/focus.html?parentId=' + parentId;
-           } else if (self.nowIndex == 2) {
-              location.href = '../../pages/tv/river.html?parentId=' + parentId;
-           } else if (self.nowIndex == 3) {
-              location.href = '../../pages/tv/affairs.html?parentId=' + parentId;
-           }
-        }
-    };
+             if (self.nowIndex == 0) {
+                location.href = '../../pages/tv/leader.html?parentId=' + parentId;
+                //location.href = './pages/test.html?parentId=' + parentId;
+             } else if (self.nowIndex == 1) {
+                location.href = '../../pages/tv/focus.html?parentId=' + parentId;
+             } else if (self.nowIndex == 2) {
+                location.href = '../../pages/tv/river.html?parentId=' + parentId;
+             } else if (self.nowIndex == 3) {
+                location.href = '../../pages/tv/affairs.html?parentId=' + parentId;
+             }
+          }
+      };
 
-    tvgoverCompt = createObjFactory(config);
+      tvgoverCompt = createObjFactory(config);
+}
+
+  function fnFirst(data) {
+      var config = {
+         url: data['href'],
+         method: 'get',
+         success: function(data) {
+            tvgoverHtml(data);
+         }
+      };
+      ajax(config);
+  }
+
+  function fnSecond(data) {
+      var config = {
+         url: data['href'],
+         method: 'get',
+         success: function(data) {
+            ruralHtml(data);
+         }
+      };
+      ajax(config);
+  }
+
+  function fnThird(data) {
+      var config = {
+         url: data['href'],
+         method: 'get',
+         success: function(data) {
+            conviHtml(data);
+         }
+      };
+      ajax(config);
+  }
+  function fnFour(data) {
+      var config = {
+         url: data['href'],
+         method: 'get',
+         success: function(data) {
+            travelHtml(data);
+         }
+      };
+      ajax(config);
+  }
+  function fnFive(data) {
+      var config = {
+         url: data['href'],
+         method: 'get',
+         success: function(data) {
+            argHtml(data);
+         }
+      };
+      ajax(config);
+  }
+  function fnSix(data) {
+    var config = {
+         url: data['href'],
+         method: 'get',
+         success: function(data) {
+            teachHtml(data);
+         }
+    };
+    ajax(config);
   }
   //智慧乡村
   function ruralHtml(data, domNode) {
     domNode = domNode || GLOBAL_CONFIG.serviceList[1];
-    var tpl = '<div class="service-item service-rural" data-parentid={{columnId}}>'+
-                  '<img src='+PIC_PATH+'{{columnCover}}>'+
-              '</div>';
+    domNode.innerHTML = data;
 
-    //创建对应的DOM结构
-    createHtmlFactory(tpl, data, domNode);
+    var nodes = domNode.children;
+    for (var i = 0, len = nodes.length; i < len; i++) {
+        var currNode = nodes[i],
+            oImg = currNode.getElementsByTagName('img')[0];
+        addClass(currNode, 'service-rural');
+        oImg.src = ALL_DATAS[0]['columnList'][i]['columnCover'];
+    }
+
 
     ruralCompt = createObjFactory({
         nodes: getByClass('service-rural'),
@@ -265,29 +355,29 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   }
   // 便民服务
   function conviHtml(data, domNode) {
-    domNode = domNode || GLOBAL_CONFIG.serviceList[2];
-    var tpl = '<div class="service-item-sm service-convenient" data-parentid={{columnId}}><img src='+PIC_PATH+'{{columnCover}}></div>',
-        html = '';
-    for (var i = 0, len = data.length; i < len; i++) {
-        if (i === 4) {
-           tpl = '<div class="service-item-xd service-convenient" data-parentid={{columnId}}><img src='+PIC_PATH+'{{columnCover}}></div>';
-        } else if (i === 5) {
-           tpl = ' <div class="service-item-sm service-convenient" data-parentid={{columnId}}><img src='+PIC_PATH+'{{columnCover}}></div>';
-        } else if (i === 6) {
-           tpl = '<div class="service-item-xd service-convenient" data-parentid={{columnId}}><img src='+PIC_PATH+'{{columnCover}}></div>';
-        }
-        html += simpleTemplateEngine(tpl, data[i]);
-    }
-    domNode.innerHTML = html;
-    conviCompt = createObjFactory({
+
+      domNode = domNode || GLOBAL_CONFIG.serviceList[2];
+      domNode.innerHTML = data;
+
+      var nodes = domNode.children;
+
+      for (var i = 0, len = nodes.length; i < len; i++) {
+          var currNode = nodes[i],
+              oImg = currNode.getElementsByTagName('img')[0];
+          addClass(currNode, 'service-convenient');
+          oImg.src = ALL_DATAS[2]['columnList'][i]['columnCover'];
+      }
+
+      conviCompt = createObjFactory({
         nodes: getByClass('service-convenient'),
         css: {borderColor: '#f00'},
         oldStyle: {borderColor: 'transparent'},
         up: function() {
-           var self = this;
-           if (self.nowIndex > 0) {
+            var self = this,
+               nowIndex = self.nowIndex;
+           if (nowIndex > 1) {
               self.blur();
-              self.nowIndex --;
+              self.nowIndex = nowIndex - 2;
               self.focus();
            } else {
               self.blur();
@@ -299,57 +389,52 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            this.handleRight();
         },
         down: function() {
-            var self = this;
-            if (self.nowIndex < self.itemSize - 1) {
-                self.blur();
-                self.nowIndex ++;
-                self.focus();
-            }
+           var self = this,
+               nowIndex = self.nowIndex,
+               size = self.itemSize;
+           if (size > 2) {
+              if (nowIndex < 2) {
+                  self.blur();
+                  self.nowIndex = nowIndex + 2;
+                  self.focus();
+              }
+           }
         },
         left: function() {
            this.handleLeft();
         },
         href: function() {
-             var self = this;
-             if (self.nowIndex == 0) {
-                self.blur();
-                self.showHighLight = false;
-                location.href = '../../pages/guide.html';
-             } else if (self.nowIndex == 1) {
-                self.blur();
-                self.showHighLight = false;
-                location.href = './pages/focus.html';
-             } else if (self.nowIndex == 2) {
-                self.blur();
-                self.showHighLight = false;
-                location.href = './pages/focus.html';
-             } else if (self.nowIndex == 3) {
-                self.blur();
-                self.showHighLight = false;
-                location.href = './pages/affairs.html';
-             }
+            var self = this;
+           if (self.nowIndex == 0) {
+              self.blur();
+              self.showHighLight = false;
+              location.href = './pages/leader.html';
+           } else if (self.nowIndex == 1) {
+              self.blur();
+              self.showHighLight = false;
+              location.href = './pages/focus.html';
+           } else if (self.nowIndex == 3) {
+              self.blur();
+              self.showHighLight = false;
+              location.href = './pages/affairs.html';
+           }
         }
-    });
+     });
   }
   // 智慧旅游
   function travelHtml(data, domNode) {
     domNode = domNode || GLOBAL_CONFIG.serviceList[3];
-    var tpl = '', html = '';
-    for (var i = 0, len = data.length; i < len; i++) {
-        if (i > 0 && i < len - 1) {
-            tpl = '<div class="service-item-md  service-travel" data-parentid={{columnId}}><img src='+PIC_PATH+'{{columnCover}}></div>';
-        } else {
-            tpl = '<div class="service-item service-travel" data-parentid={{columnId}}><img src='+PIC_PATH+'{{columnCover}}></div>';
-        }
-        html += simpleTemplateEngine(tpl, data[i]);
-        if (i === 0) {
-           html += '<div class="service-item-xs" data-parentid={{columnId}}>';
-        }
-        if (i == len - 2) {
-           html += '</div>';
-        }
+    domNode.innerHTML = data;
+
+    var nodes = domNode.children;
+
+    for (var i = 0, len = nodes.length; i < len; i++) {
+        var currNode = nodes[i],
+            oImg = currNode.getElementsByTagName('img')[0];
+        addClass(currNode, 'service-travel');
+        oImg.src = ALL_DATAS[3]['columnList'][i]['columnCover'];
     }
-    domNode.innerHTML = html;
+
     travelCompt = createObjFactory({
         nodes: getByClass('service-travel'),
         css: {borderColor: '#f00'},
@@ -407,82 +492,83 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   }
   // 智慧农业
   function argHtml(data, domNode) {
-    domNode = domNode || GLOBAL_CONFIG.serviceList[4];
+      domNode = domNode || GLOBAL_CONFIG.serviceList[4];
+      domNode.innerHTML = data;
 
-    var tpl = '<div class="service-item service-arg" data-parentid={{columnId}}>'+
-                  '<img src='+PIC_PATH+'{{columnCover}}>'+
-              '</div>';
+      var nodes = domNode.children;
+      for (var i = 0, len = nodes.length; i < len; i++) {
+          var currNode = nodes[i],
+              oImg = currNode.getElementsByTagName('img')[0];
+          addClass(currNode, 'service-arg');
+          oImg.src = ALL_DATAS[4]['columnList'][i]['columnCover'];
+      }
 
-    //创建对应的DOM结构
-    createHtmlFactory(tpl, data, domNode);
-
-    argCompt = createObjFactory({
-        nodes: getByClass('service-arg'),
-        css: {borderColor: '#f00'},
-        oldStyle: {borderColor: 'transparent'},
-        up: function() {
-            var self = this,
-               nowIndex = self.nowIndex;
-           if (nowIndex > 1) {
-              self.blur();
-              self.nowIndex = nowIndex - 2;
-              self.focus();
-           } else {
-              self.blur();
-              self.showHighLight = false;
-              navbarCompt.show();
-           }
-        },
-        right: function() {
-           this.handleRight();
-        },
-        down: function() {
-           var self = this,
-               nowIndex = self.nowIndex,
-               size = self.itemSize;
-           if (size > 2) {
-              if (nowIndex < 2) {
-                  self.blur();
-                  self.nowIndex = nowIndex + 2;
-                  self.focus();
-              }
-           }
-        },
-        left: function() {
-           this.handleLeft();
-        },
-        href: function() {
-            var self = this;
-           if (self.nowIndex == 0) {
-              self.blur();
-              self.showHighLight = false;
-              location.href = './pages/leader.html';
-           } else if (self.nowIndex == 1) {
-              self.blur();
-              self.showHighLight = false;
-              location.href = './pages/focus.html';
-           } else if (self.nowIndex == 3) {
-              self.blur();
-              self.showHighLight = false;
-              location.href = './pages/affairs.html';
-           }
-        }
-    });
+      argCompt = createObjFactory({
+          nodes: getByClass('service-arg'),
+          css: {borderColor: '#f00'},
+          oldStyle: {borderColor: 'transparent'},
+          up: function() {
+              var self = this,
+                 nowIndex = self.nowIndex;
+             if (nowIndex > 1) {
+                self.blur();
+                self.nowIndex = nowIndex - 2;
+                self.focus();
+             } else {
+                self.blur();
+                self.showHighLight = false;
+                navbarCompt.show();
+             }
+          },
+          right: function() {
+             this.handleRight();
+          },
+          down: function() {
+             var self = this,
+                 nowIndex = self.nowIndex,
+                 size = self.itemSize;
+             if (size > 2) {
+                if (nowIndex < 2) {
+                    self.blur();
+                    self.nowIndex = nowIndex + 2;
+                    self.focus();
+                }
+             }
+          },
+          left: function() {
+             this.handleLeft();
+          },
+          href: function() {
+              var self = this;
+             if (self.nowIndex == 0) {
+                self.blur();
+                self.showHighLight = false;
+                location.href = './pages/leader.html';
+             } else if (self.nowIndex == 1) {
+                self.blur();
+                self.showHighLight = false;
+                location.href = './pages/focus.html';
+             } else if (self.nowIndex == 3) {
+                self.blur();
+                self.showHighLight = false;
+                location.href = './pages/affairs.html';
+             }
+          }
+      });
   }
   // 智慧教育
   function teachHtml(data, domNode) {
     domNode = domNode || GLOBAL_CONFIG.serviceList[5];
-    var tpl = '',
-        html = '';
-    for (var i = 0, len = data.length; i < len; i++) {
-        if (i > 0 && i < len - 1) {
-            tpl = '<div class="service-item-xs service-teach"><img src='+PIC_PATH+'{{columnCover}}></div>';
-        } else {
-            tpl = '<div class="service-item service-teach"><img src='+PIC_PATH+'{{columnCover}} alt=""></div>';
-        }
-        html += simpleTemplateEngine(tpl, data[i]);
+    domNode.innerHTML = data;
+
+    var nodes = domNode.children;
+    for (var i = 0, len = nodes.length; i < len; i++) {
+        var currNode = nodes[i],
+            oImg = currNode.getElementsByTagName('img')[0];
+        addClass(currNode, 'service-teach');
+        oImg.src = ALL_DATAS[5]['columnList'][i]['columnCover'];
     }
-    domNode.innerHTML = html;
+
     teachCompt = createObjFactory({
         nodes: getByClass('service-teach'),
         css: {borderColor: '#f00'},

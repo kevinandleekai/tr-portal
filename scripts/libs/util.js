@@ -53,7 +53,7 @@ define(function(){
               return null;
             } else if (result.length === 1) {
               result = result[0];
-            } 
+            }
             return result;
         };
       }
@@ -121,7 +121,20 @@ define(function(){
         };
     };
 
-
+    /**
+        简单的为指定的DOM节点添加class
+    **/
+    var addClass = function(node, sclassName) {
+        if (!node || !sclassName) return;
+        var classList = node.className.split(' ');
+        for (var i = 0, len = classList.length; i < len; i++) {
+            if (classList[i] === sclassName) {
+                return;
+            }
+        }
+        classList.push(sclassName);
+        node.className = classList.join(' ');
+    }
     //将所有的方法全部暴露给外部
     return {
         "extend": extend,
@@ -130,6 +143,7 @@ define(function(){
         "contains": contains,
         "id": id,
         "getParam": getParam,
-        "getClientInfo": getClientInfo
+        "getClientInfo": getClientInfo,
+        "addClass": addClass
     }
 })

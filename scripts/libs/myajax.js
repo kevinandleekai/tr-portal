@@ -3,14 +3,14 @@ define(function () {
       if (!opts) return;
       //设置默认参数
       var settings = {
-        method: "POST",
-        url: "",
-        data: null,
-        async: true,
-        cache: true,
-        contentType: "application/x-www-form-urlencoded",
-        success: function () {},
-        error: function () {}
+          method: "POST",
+          url: "",
+          data: null,
+          async: true,
+          cache: true,
+          contentType: "application/x-www-form-urlencoded",
+          success: function () {},
+          error: function () {}
       };
       //扩展默认参数
       for (var key in opts) {

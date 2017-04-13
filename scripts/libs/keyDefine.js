@@ -1,10 +1,10 @@
 // 本文件定义常见的键值(可以自行删减， 我拿到手的版本就是这么多)
 //***************************** 键值定义 *****************************
 define(function(){
-   var ROC_IRKEY_UP            = 38    /*0x0026,  遥控器上的向上键*/
-   var ROC_IRKEY_RIGHT         = 37    /*0x0027,  遥控器上的向右键*/
-   var ROC_IRKEY_DOWN          = 40    /*0x0028,  遥控器上的向下键*/
-   var ROC_IRKEY_LEFT          = 39    /*0x0025,  遥控器上的向左键*/
+   var ROC_IRKEY_UP            = 87    /*0x0026,  遥控器上的向上键*/
+   var ROC_IRKEY_RIGHT         = 68    /*0x0027,  遥控器上的向右键*/
+   var ROC_IRKEY_DOWN          = 83    /*0x0028,  遥控器上的向下键*/
+   var ROC_IRKEY_LEFT          = 65    /*0x0025,  遥控器上的向左键*/
    var ROC_IRKEY_SELECT        = 13    /*0x000D,  遥控器上的确定键,即OK*/
    var ROC_IRKEY_BACK          = 642   /*0x0280,  遥控器上的返回键,即TOGGLE*/
 
