@@ -114,11 +114,15 @@ define(function(){
      * @return {[Object]} [description]
      */
     var getClientInfo = function() {
-        var CA = {};
-        return {
-          "smartNo": CA.icNo,
-          "reginCode": CA.regionCode || '22'
-        };
+        try {
+            var CA = CA || {};
+            return {
+              "smartNo": CA.icNo,
+              "reginCode": CA.regionCode || '22'
+            };
+        } catch (exp) {
+            alert("错误消息为:" + exp);
+        }
     };
 
     /**

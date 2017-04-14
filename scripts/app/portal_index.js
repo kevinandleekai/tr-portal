@@ -6,7 +6,9 @@ require.config({
     baseUrl: './scripts/libs'
 });
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
-  var URL = '../../testData/index.json';   // 请求的action地址
+  //var URL = '../../testData/index.json';   // 请求的action地址
+
+  var URL = 'http://192.168.38.47:8090/gportal/GetPlateList.action';
   var getByClass = util.getByClass;  // 根据class来获取元素
   var id = util.id;  // 根据id来获取元素
   var ajax = myajax.ajax;   // ajax 请求通用函数
@@ -23,15 +25,27 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   //全局页面配置参数
   var GLOBAL_CONFIG = {
       pageInitParam: {
-         url: URL,
-         method: 'get',
-         success: function(data) {
-             data = eval('('+ data +')');
-             ALL_DATAS = data['columnList'];
-             render(ALL_DATAS);
-             // 请求电视政务导航对应模块
-             commonRequest(ALL_DATAS[0]['href'], tvgoverHtml);
-         }
+          url: URL,
+          data: "{'userNo': 'shangcaoshi'}",
+          success: function(data) {
+              data = eval('('+ data +')');
+              var resultCode = parseInt(data['resultCode'], 10);
+
+              // resultCode为非0时, 直接当失败处理
+              if (resultCode !== 0) {
+                 alert('请求失败!');
+                 return false;
+              } else {
+                  // resultCode为0, 并且columnList的长度大于0才进行DOM操作
+                  ALL_DATAS = data['columnList'];
+                  if (ALL_DATAS.length) {
+                     // 构建导航DOM结构
+                     render(ALL_DATAS);
+                     // 请求电视政务导航对应模块
+                     commonRequest(ALL_DATAS[0]['href'], tvgoverHtml);
+                  }
+              }
+          }
       },
 
       //每个导航项内对应的内容容器集合
@@ -155,11 +169,16 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       var len = node.length, currNode, i, oImg;
       for (i = 0; i < len; i++) {
           currNode = node[i];
+          currNode.setAttribute('data-mainHtml', data['columnList'][i]['mainHtml']);
+          currNode.setAttribute('data-parentid', data['columnList'][i]['columnNo']);
           addClass(currNode, sName);
           oImg = currNode.getElementsByTagName('img')[0];
-          oImg.src = data['columnList'][i]['columnCover'];
+          var columnCover = data['columnList'][i]['columnCover'].replace('..', '');
+          columnCover = PIC_PATH + columnCover;
+          oImg.src = columnCover;
       }
   }
+
   // 电视政务
   function tvgoverHtml(data, domNode) {
       domNode = domNode || GLOBAL_CONFIG.serviceList[0];
@@ -205,20 +224,15 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
           },
           href: function() {
               var self = this,
-                  nowIndex = self.nowIndex,
-                  parentId = self.aItems[nowIndex].getAttribute('data-parentid');
-              self.blur();
-              self.showHighLight = false;
-             if (self.nowIndex == 0) {
-                location.href = '../../pages/tv/leader.html?parentId=' + parentId;
-                //location.href = './pages/test.html?parentId=' + parentId;
-             } else if (self.nowIndex == 1) {
-                location.href = '../../pages/tv/focus.html?parentId=' + parentId;
-             } else if (self.nowIndex == 2) {
-                location.href = '../../pages/tv/river.html?parentId=' + parentId;
-             } else if (self.nowIndex == 3) {
-                location.href = '../../pages/tv/affairs.html?parentId=' + parentId;
-             }
+                  currDom = self.aItems[self.nowIndex],
+                  linkHref = currDom.getAttribute('data-mainHtml'),
+                  parentId = currDom.getAttribute('data-parentid');
+              // 跳转到对应的页面
+              if (linkHref) {
+                  self.blur();
+                  self.showHighLight = false;
+                  location.href = linkHref + '?parentId=' + parentId;
+              }
           }
       };
       tvgoverCompt = createObjFactory(config);
@@ -273,7 +287,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
              if (self.nowIndex == 0) {
                 self.blur();
                 self.showHighLight = false;
-                location.href = './pages/leader.html';
+                location.href = './pages/tv/leader.html';
              } else if (self.nowIndex == 1) {
                 self.blur();
                 self.showHighLight = false;
@@ -594,9 +608,9 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
     serviceList[this.nowIndex].className = className + ' ' + regTxt;
   }
 
-  // 页面初始化开始
   function pageInit() {
      ajax(GLOBAL_CONFIG.pageInitParam);
   }
+  // 页面初始化开始
   pageInit();
 });

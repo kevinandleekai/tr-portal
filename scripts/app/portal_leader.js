@@ -11,41 +11,41 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       util = util;
       component = component;
 
-
       var SERVER_PATH = global.SERVER_PATH;
-
       var createHtmlFactory =  component.createHtmlFactory;
-
       var createObjFactory = component.createObjFactory;
-
-  	  var reqPath = SERVER_PATH + 'GetPageList';
-
+  	  //var reqPath = SERVER_PATH + 'GetPageList';
       var ajax = myajax.ajax;
 
       var getByClass =  util.getByClass;
       var getClientInfo = util.getClientInfo;
       var getParam = util.getParam;
 
-      var URL = '../../testData/leader.json';
+      /*var URL =  "http://192.168.1.111:8090/gportal/GetColumnList.action?parentId="+columnNo+"pageType=1"+"&userNo=shangcaoshi";*/
+      var URL = 'http://192.168.38.47:8090/gportal/GetColumnList.action';
+
+      var parentId = getParam('parentId');
 
       var GLOBAL_CONFIG = {
           pageInitParam: {
-             url: URL,
-             method: 'GET',
-             data: {
-                client: getClientInfo().smartNo,
-                regionCode: getClientInfo().reginCode,
-                parentId: getParam('parentId'),
-                startPage: 1,
-                pageSize: 2,
-                pageType: 1,
-                parentType: 1
-             },
-             success: function(data) {
+              url: URL,
+              data: "{'parentId': "+parentId+", pageType:1, 'userNo': 'shangchaoshi'}",
+              success: function(data) {
                  data = eval('('+ data +')');
-                 data = data[0]['pageList'][0]['pageCover'];
-                 render(data);
-             }
+                 var resultCode = parseInt(data['resultCode'], 10);
+                 // resultCode为非0时, 直接当失败处理
+                 if (resultCode !== 0) {
+                     alert('请求失败!');
+                     return false;
+                 } else {
+                     // resultCode为0, 并且pageCover的长度大于0才进行DOM操作
+                     var columnList = data['columnList'];
+                     if (columnList.length) {
+                        render(columnList[0]);
+                     }
+                 }
+                 console.dir(data);
+              }
           }
       };
 
@@ -77,4 +77,5 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
 
       // 页面初始操作
       ajax(GLOBAL_CONFIG.pageInitParam);
+
 });
