@@ -58,7 +58,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       }
 
       // 组件参数配置
-	  var config = {
+	  /*var config = {
     	   nodes: getByClass('pagenation-btn'),
          css: {backgroundColor: '#f60'},
          right: function() {
@@ -74,7 +74,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
 	  var pageNationCompt = null;
 	  // 创建组件
 	  pageNationCompt = createObjFactory(config);
-	  pageNationCompt.init(1);
+	  pageNationCompt.init(1);*/
 
     // 页面初始化
     ajax(GLOBAL_CONFIG.pageInitParam);

@@ -66,9 +66,8 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   	        	 this.handleLeft();
   	        },
   	        href: function() {
-  	        	history.go(-1);
+  	        	  var self = this;
   	        }
-
      		 };
     		 var pageNationCompt = null;
        		//创建组件

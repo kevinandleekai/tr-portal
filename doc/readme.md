@@ -27,3 +27,4 @@
 
 #### template文件夹
 - tpl_four.html       四个方格的模板
+- tpl_ld.html         领导模板

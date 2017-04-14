@@ -6,13 +6,13 @@ require.config({
     baseUrl: './scripts/libs'
 });
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
-  var URL = '../../testData/index.json';
-  var getByClass = util.getByClass;
-  var id = util.id;
-  var ajax = myajax.ajax;
+  var URL = '../../testData/index.json';   // 请求的action地址
+  var getByClass = util.getByClass;  // 根据class来获取元素
+  var id = util.id;  // 根据id来获取元素
+  var ajax = myajax.ajax;   // ajax 请求通用函数
   var createHtmlFactory = component.createHtmlFactory;
   var createObjFactory = component.createObjFactory;
-  var PIC_PATH = global.PIC_PATH;
+  var PIC_PATH = global.PIC_PATH;    // 图片地址
   var page = JAlex.page;
   var simpleTemplateEngine = util.simpleTemplateEngine;
 
@@ -22,15 +22,15 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
 
   //全局页面配置参数
   var GLOBAL_CONFIG = {
-      //页面初始化时, 请求参数
       pageInitParam: {
          url: URL,
          method: 'get',
          success: function(data) {
              data = eval('('+ data +')');
-             ALL_DATAS = data;
-             render(data);
-             fnFirst(ALL_DATAS[0]);
+             ALL_DATAS = data['columnList'];
+             render(ALL_DATAS);
+             // 请求电视政务导航对应模块
+             commonRequest(ALL_DATAS[0]['href'], tvgoverHtml);
          }
       },
 
@@ -40,25 +40,18 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       // 每个导航项对应的内容区域(HTML)渲染方法集合, 这里面每个变量对应着一个函数名称
       // 能这样写的原因在于: JS当中变量存在作用域提升的特性
       rendHtmlList: [
-          tvgoverHtml, ruralHtml, conviHtml,
-          travelHtml, argHtml, teachHtml, elecHtml
+          tvgoverHtml, ruralHtml, conviHtml, travelHtml, argHtml,
+          teachHtml, elecHtml
       ]
   };
   // 组件引用变量(这里不把这些变量集成到一个对象或者数组里面是因为之前有试过, 但是出现BUG
   // 还没有解决, 等时间充足再试一试)
-  var navbarCompt = null, tvgoverCompt = null, ruralCompt = null, conviCompt = null,
-      travelCompt = null, argCompt = null, teachCompt = null, elecCompt = null;
+  var navbarCompt = null, tvgoverCompt = null, ruralCompt = null,
+      conviCompt = null, travelCompt = null, argCompt = null,
+      teachCompt = null, elecCompt = null;
 
   //渲染页面导航菜单和对应的菜单项内容区域
-  function render(data) {
-      // 构建导航区域DOM结构
-      navbarHtml(data, id("navbar"));
-  }
-
-  // 这里分开这么多构建DOM方法,的恶心写法原因在于, 页面设计的恶心, 很多的DOM结构无法公用
-  // 数据也是一次性给我返回所有, 都很恶心，暂时没有想出更好的解决办法
-  //导航菜单DOM
-  function navbarHtml(data, domNode) {
+  function render(data, domNode) {
       domNode = domNode || id("navbar");
 
       // 定义对应的DOM字符串模板
@@ -72,27 +65,25 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
          nodes: getByClass('navbar-item', domNode),
          css: {color: '#f00'},
          right: function() {
-             //this.handleRight(tab);
              var self = this, nowIndex = self.nowIndex,
                  list = GLOBAL_CONFIG.serviceList;
-
              if (this.nowIndex < self.itemSize - 1) {
                   self.blur();
                   self.nowIndex ++;
                   self.focus();
                   tab.call(this);
                   if (self.nowIndex === 1) {
-                      fnSecond(ALL_DATAS[1]);
+                      commonRequest(ALL_DATAS[1]['href'], ruralHtml);
                   } else if (self.nowIndex === 2) {
-                      fnThird(ALL_DATAS[2]);
+                      commonRequest(ALL_DATAS[2]['href'], conviHtml);
                   } else if (self.nowIndex === 3) {
-                      fnFour(ALL_DATAS[3]);
+                      commonRequest(ALL_DATAS[3]['href'], travelHtml);
                   } else if (self.nowIndex === 4) {
-                      fnFive(ALL_DATAS[4]);
+                      commonRequest(ALL_DATAS[4]['href'], argHtml);
                   } else if (self.nowIndex === 5) {
-                      fnSix(ALL_DATAS[5]);
+                      commonRequest(ALL_DATAS[5]['href'], teachHtml);
                   } else if (self.nowIndex === 6) {
-                      fnSeven(ALL_DATAS[6]);
+                      commonRequest(ALL_DATAS[6]['href'], elecHtml);
                   }
              }
          },
@@ -100,67 +91,83 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
              this.handleLeft(tab);
          },
          down: function() {
-          var self = this, nowIndex = self.nowIndex;
-          if (nowIndex == 0) {
-              if (tvgoverCompt) {
-                 self.blur();
-                 self.showHighLight = false;
-                 tvgoverCompt.show();
-              }
-          } else if (nowIndex == 1) {
-             if (ruralCompt) {
-                self.blur();
-                self.showHighLight = false;
-                ruralCompt.show();
-             }
-          } else if (nowIndex == 2) {
-             if (conviCompt) {
-                self.blur();
-                self.showHighLight = false;
-                conviCompt.show();
-             }
-          } else if (nowIndex == 3) {
-             if (travelCompt) {
-                self.blur();
-                self.showHighLight = false;
-                travelCompt.show();
-             }
-          } else if (nowIndex == 4) {
-             if (argCompt) {
-                self.blur();
-                self.showHighLight = false;
-                argCompt.show();
-             }
-          } else if (nowIndex == 5) {
-             if (teachCompt) {
-                self.blur();
-                self.showHighLight = false;
-                teachCompt.show();
-             }
-          } else if (nowIndex == 6) {
-              if (elecCompt) {
-                self.blur();
-                self.showHighLight = false;
-                elecCompt.show();
-              }
+            var self = this, nowIndex = self.nowIndex;
+            if (nowIndex == 0) {
+                if (tvgoverCompt) {
+                   self.blur();
+                   self.showHighLight = false;
+                   tvgoverCompt.show();
+                }
+            } else if (nowIndex == 1) {
+               if (ruralCompt) {
+                  self.blur();
+                  self.showHighLight = false;
+                  ruralCompt.show();
+               }
+            } else if (nowIndex == 2) {
+               if (conviCompt) {
+                  self.blur();
+                  self.showHighLight = false;
+                  conviCompt.show();
+               }
+            } else if (nowIndex == 3) {
+               if (travelCompt) {
+                  self.blur();
+                  self.showHighLight = false;
+                  travelCompt.show();
+               }
+            } else if (nowIndex == 4) {
+               if (argCompt) {
+                  self.blur();
+                  self.showHighLight = false;
+                  argCompt.show();
+               }
+            } else if (nowIndex == 5) {
+               if (teachCompt) {
+                  self.blur();
+                  self.showHighLight = false;
+                  teachCompt.show();
+               }
+            } else if (nowIndex == 6) {
+                if (elecCompt) {
+                  self.blur();
+                  self.showHighLight = false;
+                  elecCompt.show();
+                }
             }
-        }
+         }
       };
+
       navbarCompt = createObjFactory(config);
       navbarCompt.init();
   }
-// 电视政务
+
+  // 这里分开这么多构建DOM方法,的恶心写法原因在于, 页面设计的恶心, 很多的DOM结构无法公用
+  // 数据也是一次性给我返回所有, 都很恶心，暂时没有想出更好的解决办法
+
+  /**
+   * @param {[node 要追加内容的节点]}
+   * @param {[sName 要追加的class名称]}
+   * @param {[data  主要取图片地址]}
+   */
+  function addOption(node, sName, data) {
+      if (!node || !sName || !data) return false;
+      var len = node.length, currNode, i, oImg;
+      for (i = 0; i < len; i++) {
+          currNode = node[i];
+          addClass(currNode, sName);
+          oImg = currNode.getElementsByTagName('img')[0];
+          oImg.src = data['columnList'][i]['columnCover'];
+      }
+  }
+  // 电视政务
   function tvgoverHtml(data, domNode) {
       domNode = domNode || GLOBAL_CONFIG.serviceList[0];
-
       domNode.innerHTML = data;
+
       var nodes = domNode.children;
-      for (var i = 0, len = nodes.length; i < len; i++) {
-          var currNode = nodes[i],
-              oImg = currNode.getElementsByTagName('img')[0];
-          addClass(currNode, 'service-gov');
-          oImg.src = ALL_DATAS[0]['columnList'][i]['columnCover'];
-      }
+      addOption(nodes, "service-gov", ALL_DATAS[0]);
+
       var config = {
           nodes: getByClass('service-gov', domNode),
           css: {borderColor: '#f00'},
@@ -214,81 +221,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
              }
           }
       };
-
       tvgoverCompt = createObjFactory(config);
-}
-
-  function fnFirst(data) {
-      var config = {
-         url: data['href'],
-         method: 'get',
-         success: function(data) {
-            tvgoverHtml(data);
-         }
-      };
-      ajax(config);
-  }
-
-  function fnSecond(data) {
-      var config = {
-         url: data['href'],
-         method: 'get',
-         success: function(data) {
-            ruralHtml(data);
-         }
-      };
-      ajax(config);
-  }
-
-  function fnThird(data) {
-      var config = {
-         url: data['href'],
-         method: 'get',
-         success: function(data) {
-            conviHtml(data);
-         }
-      };
-      ajax(config);
-  }
-  function fnFour(data) {
-      var config = {
-         url: data['href'],
-         method: 'get',
-         success: function(data) {
-            travelHtml(data);
-         }
-      };
-      ajax(config);
-  }
-  function fnFive(data) {
-      var config = {
-         url: data['href'],
-         method: 'get',
-         success: function(data) {
-            argHtml(data);
-         }
-      };
-      ajax(config);
-  }
-  function fnSix(data) {
-    var config = {
-         url: data['href'],
-         method: 'get',
-         success: function(data) {
-            teachHtml(data);
-         }
-    };
-    ajax(config);
-  }
-  function fnSeven(data) {
-    var config = {
-         url: data['href'],
-         method: 'get',
-         success: function(data) {
-            elecHtml(data);
-         }
-    };
-    ajax(config);
   }
   //智慧乡村
   function ruralHtml(data, domNode) {
@@ -296,13 +229,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
     domNode.innerHTML = data;
 
     var nodes = domNode.children;
-    for (var i = 0, len = nodes.length; i < len; i++) {
-        var currNode = nodes[i],
-            oImg = currNode.getElementsByTagName('img')[0];
-        addClass(currNode, 'service-rural');
-        oImg.src = ALL_DATAS[0]['columnList'][i]['columnCover'];
-    }
-
+    addOption(nodes, 'service-rural', ALL_DATAS[1]);
 
     ruralCompt = createObjFactory({
         nodes: getByClass('service-rural'),
@@ -365,18 +292,11 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   }
   // 便民服务
   function conviHtml(data, domNode) {
-
       domNode = domNode || GLOBAL_CONFIG.serviceList[2];
       domNode.innerHTML = data;
 
       var nodes = domNode.children;
-
-      for (var i = 0, len = nodes.length; i < len; i++) {
-          var currNode = nodes[i],
-              oImg = currNode.getElementsByTagName('img')[0];
-          addClass(currNode, 'service-convenient');
-          oImg.src = ALL_DATAS[2]['columnList'][i]['columnCover'];
-      }
+      addOption(nodes, 'service-convenient', ALL_DATAS[2]);
 
       conviCompt = createObjFactory({
         nodes: getByClass('service-convenient'),
@@ -438,12 +358,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
 
     var nodes = domNode.children;
 
-    for (var i = 0, len = nodes.length; i < len; i++) {
-        var currNode = nodes[i],
-            oImg = currNode.getElementsByTagName('img')[0];
-        addClass(currNode, 'service-travel');
-        oImg.src = ALL_DATAS[3]['columnList'][i]['columnCover'];
-    }
+    addOption(nodes, 'service-travel', ALL_DATAS[3]);
 
     travelCompt = createObjFactory({
         nodes: getByClass('service-travel'),
@@ -497,7 +412,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
         },
         left: function() {
            this.handleLeft();
-        },
+        }
      });
   }
   // 智慧农业
@@ -506,12 +421,8 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       domNode.innerHTML = data;
 
       var nodes = domNode.children;
-      for (var i = 0, len = nodes.length; i < len; i++) {
-          var currNode = nodes[i],
-              oImg = currNode.getElementsByTagName('img')[0];
-          addClass(currNode, 'service-arg');
-          oImg.src = ALL_DATAS[4]['columnList'][i]['columnCover'];
-      }
+
+      addOption(nodes, 'service-arg', ALL_DATAS[4]);
 
       argCompt = createObjFactory({
           nodes: getByClass('service-arg'),
@@ -570,14 +481,9 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   function teachHtml(data, domNode) {
     domNode = domNode || GLOBAL_CONFIG.serviceList[5];
     domNode.innerHTML = data;
-
     var nodes = domNode.children;
-    for (var i = 0, len = nodes.length; i < len; i++) {
-        var currNode = nodes[i],
-            oImg = currNode.getElementsByTagName('img')[0];
-        addClass(currNode, 'service-teach');
-        oImg.src = ALL_DATAS[5]['columnList'][i]['columnCover'];
-    }
+
+    addOption(nodes, 'service-teach', ALL_DATAS[5]);
 
     teachCompt = createObjFactory({
         nodes: getByClass('service-teach'),
@@ -655,20 +561,42 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
         }
     });
   }
+
   /**
-  ***  tab切换
-  **/
+   * @param  {url 请求的action地址}
+   * @param  {callback  回调函数}
+   */
+  function commonRequest(url, callback) {
+      var config = {
+          url: url,
+          method: 'get',
+          success: function(data) {
+              callback && callback(data);
+          }
+      };
+      ajax(config);
+  }
+
+  /**
+   * 导航栏颜色切换
+   */
   function tab() {
-      var serviceList = GLOBAL_CONFIG.serviceList,
-          regTxt = 'service-list-active';
-      for (var i = 0; i < serviceList.length; i++) {
-          var className = serviceList[i].className;
-          className = className.replace(regTxt, '');
-          serviceList[i].className = className;
-      }
-      serviceList[this.nowIndex].className = className + ' ' + regTxt;
+    var serviceList = GLOBAL_CONFIG.serviceList,
+        regTxt = 'service-list-active',
+        len = serviceList.length,
+        i,
+        className;
+    for (i = 0; i < len; i++) {
+        className = serviceList[i].className;
+        className = className.replace(regTxt, '');
+        serviceList[i].className = className;
+    }
+    serviceList[this.nowIndex].className = className + ' ' + regTxt;
   }
 
   // 页面初始化开始
-  ajax(GLOBAL_CONFIG.pageInitParam);
+  function pageInit() {
+     ajax(GLOBAL_CONFIG.pageInitParam);
+  }
+  pageInit();
 });
