@@ -46,7 +46,7 @@ $top_height: 96px;
 $font_weight: 500;
 $font30: 30px;
 $white: #fff;
-/*澶撮儴*/
+/*头部*/
 .header {
    padding-top: 10px;
    padding-bottom: 10px;
@@ -92,7 +92,7 @@ $white: #fff;
    }
 }
 
-/* start 瀵艰埅閮ㄥ垎*/
+/* start 导航部分*/
 .navbar {
    padding-bottom: 10px;
    overflow: hidden;
@@ -107,9 +107,9 @@ $white: #fff;
       font-weight: $font_weight;
    }
 }
-/* end 瀵艰埅閮ㄥ垎*/
+/* end 导航部分*/
 
-/* start 涓棿涓讳綋閮ㄥ垎 */
+/* start 中间主体部分 */
 $main-height: 450px;
 $service-width: 300px;
 .middle {
@@ -270,7 +270,7 @@ $service-width: 300px;
 
 
 }
-/* end 涓棿涓讳綋閮ㄥ垎 */
+/* end 中间主体部分 */
 
 
 .detail-title {
