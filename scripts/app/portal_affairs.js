@@ -5,7 +5,7 @@ require.config({
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
 
       keyDefine = keyDefine;
-      global = keyDefine ;
+      global = global;
       JAlex = JAlex;
       GKey = GKey;
       myajax = myajax;
@@ -27,27 +27,18 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       var getClientInfo = util.getClientInfo;
       var getParam = util.getParam;
 
+      var parentId = getParam('parentId');
+      var action = getParam('action');
 
-      var reqPath = SERVER_PATH + 'GetColumnList';
-      var url = '../../testData/affairs.json';
+
       //页面配置参数
       var GLOBAL_CONFIG = {
           pageInitParam: {
-             url: url,
-             data: {
-                client: getClientInfo().smartNo,
-                parentId: getParam('parentId'),
-                reginCode: getClientInfo().reginCode,
-                pageType: 1,
-                parentType: 1,
-                startPage: 1,
-                pageSize: 8,
-                exds: ''
-             },
-             method: 'GET',
+             url: SERVER_PATH + action,
+             data: "{'parentId': "+parentId+", pageType:1, 'userNo': 'shangchaoshi'}",
              success: function(data) {
                  data = eval('('+ data +')');
-                 render(data['plateList']);
+                 //render(data['plateList']);
              }
           }
       };

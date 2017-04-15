@@ -3,57 +3,60 @@ require.config({
 });
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
       keyDefine = keyDefine;
-      global = keyDefine ;
+      global = global ;
       JAlex = JAlex;
       GKey = GKey;
       myajax = myajax;
       util = util;
       component = component;
 
-
-      var SERVER_PATH = global.SERVER_PATH;
-
       var createHtmlFactory =  component.createHtmlFactory;
-
       var createObjFactory = component.createObjFactory;
-
-      var reqPath = SERVER_PATH + 'GetPageList';
-
       var ajax = myajax.ajax;
+
+      var SERVER_PATH = global.SERVER_PATH; // 请求的服务地址
+      var PIC_PATH = global.PIC_PATH;  // 图片的地址
+
+      /*var URL =  "http://192.168.1.111:8090/gportal/GetColumnList.action?parentId="+columnNo+"pageType=1"+"&userNo=shangcaoshi";*/
+
 
       var getByClass =  util.getByClass;
       var getClientInfo = util.getClientInfo;
       var getParam = util.getParam;
 
-      var reqPath = SERVER_PATH + 'GetColumnList';
-      var url = '../../testData/focus.json';
+      var parentId = getParam('parentId');
+      var action = getParam('action');
+
       //页面配置参数
       var GLOBAL_CONFIG = {
           pageInitParam: {
-             url: url,
-             data: {
-                client: getClientInfo().smartNo,
-                parentId: getParam('parentId'),
-                reginCode: getClientInfo().reginCode,
-                pageType: 1,
-                parentType: 1,
-                startPage: 1,
-                pageSize: 8,
-                exds: ''
-             },
-             method: 'GET',
+             url: SERVER_PATH + action,
+             data: "{'parentId': "+parentId+", pageType:2, 'userNo': 'shangchaoshi'}",
              success: function(data) {
                  data = eval('('+ data +')');
-                 render(data['plateList']);
+                 var resultCode = parseInt(data['resultCode'], 10);
+                 // resultCode值为非0时，直接当错误处理
+                 if (resultCode !== 0) {
+                     alert('请求错误！');
+                     return false;
+                 }
+                 var articleList = data['columnList'][0]['articleList'];
+                 if (!articleList.length) {
+                    alert('没有返回数据');
+                    return false;
+                 }
+                 render(articleList);
+                 //render(data['plateList']);
              }
           }
       };
+
       var lstCompt = null, pageNationCompt = null;
       function render(data, domNode) {
           domNode = domNode || getByClass('txt-list');
-          tpl = '<li class="txt-list-item" data-plateid="{{plateId}}">{{plateTitle}}</li>';
+          var tpl = '<li class="txt-list-item" data-plateid="{{plateId}}">{{plateTitle}}</li>';
           // 构建DOM节点
-          createHtmlFactory(tpl, data, domNode);
+          //createHtmlFactory(tpl, data, domNode);
 
           var config = {
           	 nodes: getByClass('txt-list-item'),
@@ -75,7 +78,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   	         }
           };
           // 创建组件对象
-          lstCompt = createObjFactory(config);
+          //lstCompt = createObjFactory(config);
       }
 
       var config = {
@@ -99,9 +102,11 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   	     	  history.go(-1);
   	     }
       };
-      pageNationCompt = createObjFactory(config);
-      pageNationCompt.init(1);
-
       //页面初始化
-      ajax(GLOBAL_CONFIG.pageInitParam);
+      function pageInit() {
+          pageNationCompt = createObjFactory(config);
+          pageNationCompt.init(1);
+          ajax(GLOBAL_CONFIG.pageInitParam);
+      }
+      pageInit();
 });

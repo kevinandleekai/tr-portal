@@ -6,7 +6,6 @@ require.config({
     baseUrl: './scripts/libs'
 });
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
-  //var URL = '../../testData/index.json';   // 请求的action地址
 
   var URL = 'http://192.168.38.47:8090/gportal/GetPlateList.action';
   var getByClass = util.getByClass;  // 根据class来获取元素
@@ -171,6 +170,8 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
           currNode = node[i];
           currNode.setAttribute('data-mainHtml', data['columnList'][i]['mainHtml']);
           currNode.setAttribute('data-parentid', data['columnList'][i]['columnNo']);
+
+          currNode.setAttribute('data-action', data['columnList'][i]['action']);
           addClass(currNode, sName);
           oImg = currNode.getElementsByTagName('img')[0];
           var columnCover = data['columnList'][i]['columnCover'].replace('..', '');
@@ -227,11 +228,13 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
                   currDom = self.aItems[self.nowIndex],
                   linkHref = currDom.getAttribute('data-mainHtml'),
                   parentId = currDom.getAttribute('data-parentid');
+                  action = currDom.getAttribute('data-action');
               // 跳转到对应的页面
               if (linkHref) {
                   self.blur();
                   self.showHighLight = false;
-                  location.href = linkHref + '?parentId=' + parentId;
+                  // 懒得加密参数值
+                  location.href = linkHref + '?parentId=' + parentId + '&action=' + action;
               }
           }
       };
