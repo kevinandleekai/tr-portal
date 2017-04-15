@@ -7,7 +7,7 @@ require.config({
 });
 require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'], function(keyDefine, global, JAlex, GKey, myajax, util, component){
 
-  var URL = 'http://192.168.38.47:8090/gportal/GetPlateList.action';
+
   var getByClass = util.getByClass;  // 根据class来获取元素
   var id = util.id;  // 根据id来获取元素
   var ajax = myajax.ajax;   // ajax 请求通用函数
@@ -16,34 +16,34 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   var PIC_PATH = global.PIC_PATH;    // 图片地址
   var page = JAlex.page;
   var simpleTemplateEngine = util.simpleTemplateEngine;
-
   var addClass = util.addClass;
 
   var ALL_DATAS = null;    // 引用第一次请求时, 返回回来的所有数据。
+  var SERVER_PATH = global.SERVER_PATH;
 
   //全局页面配置参数
   var GLOBAL_CONFIG = {
       pageInitParam: {
-          url: URL,
+          url: SERVER_PATH + 'GetPlateList.action',
           data: "{'userNo': 'shangcaoshi'}",
           success: function(data) {
               data = eval('('+ data +')');
               var resultCode = parseInt(data['resultCode'], 10);
-
               // resultCode为非0时, 直接当失败处理
               if (resultCode !== 0) {
                  alert('请求失败!');
                  return false;
-              } else {
-                  // resultCode为0, 并且columnList的长度大于0才进行DOM操作
-                  ALL_DATAS = data['columnList'];
-                  if (ALL_DATAS.length) {
-                     // 构建导航DOM结构
-                     render(ALL_DATAS);
-                     // 请求电视政务导航对应模块
-                     commonRequest(ALL_DATAS[0]['href'], tvgoverHtml);
-                  }
               }
+              // 如果columnList字段的数据长度为0，直接当做没有数据处理
+              ALL_DATAS = data['columnList'];
+              if (!ALL_DATAS.length) {
+                  alert('没有任何数据!');
+                  return false;
+              }
+              // 构建导航DOM结构
+              render(ALL_DATAS);
+              // 请求电视政务导航对应模块
+              commonRequest(ALL_DATAS[0]['href'], tvgoverHtml);
           }
       },
 
@@ -229,13 +229,12 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
                   linkHref = currDom.getAttribute('data-mainHtml'),
                   parentId = currDom.getAttribute('data-parentid');
                   action = currDom.getAttribute('data-action');
-              // 跳转到对应的页面
-              if (linkHref) {
-                  self.blur();
-                  self.showHighLight = false;
-                  // 懒得加密参数值
-                  location.href = linkHref + '?parentId=' + parentId + '&action=' + action;
-              }
+
+              if (!linkHref) return false;
+              self.blur();
+              self.showHighLight = false;
+              // 跳转到对应的页面, 懒得加密参数值
+              location.href = linkHref + '?parentId=' + parentId + '&action=' + action;
           }
       };
       tvgoverCompt = createObjFactory(config);

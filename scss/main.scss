@@ -302,6 +302,7 @@ $service-width: 300px;
    margin-top: -20px;
    width: 35px;
    height: 68px;
+   border: 5px solid #110f7c;
    z-index: 5;
    text-align: center;
    background: url(../imgs/arrow.png) no-repeat;
@@ -328,6 +329,8 @@ $service-width: 300px;
 }
 .gallery-item {
   width: 243px;
+  height: 215px;
+  border: 5px solid #110f7c;
   position: relative;
   float: left;
   margin-right: 10px;
@@ -563,7 +566,6 @@ $service-width: 300px;
 .affairs-title{
     color: #cc0000;
     width:100%;
-    text-align: center;
 }
 
 .scenic-info {
@@ -684,26 +686,6 @@ $service-width: 300px;
   text-align: center;
   line-height: 90px;
 }
-
-.wrap .prev, .wrap .next {
-    height: 320px;
-    position: absolute;
-    left: -50%;
-    top: 0;
-    background-color: #999;
-    opacity: 0.7;
-    width: 100%;
-}
-
-.wrap .next {
-    left: auto;
-    right: -50%;
-}
-
-.wrap .prev:hover, .wrap .next:hover {
-    opacity: 0.5;
-}
-
 .container {
     width: 300px;
     height: 300px;
@@ -830,4 +812,17 @@ $service-width: 300px;
 .debugger-box {
    height: 200px;
    background-color: #f90;
+}
+// 通用列表
+.common-list {
+
+}
+.common-list-item {
+    padding-left: 20px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    border: 5px solid #110f7c;
+    background-color: #2a59a9;
+    color: #fff;
 }

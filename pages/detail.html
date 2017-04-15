@@ -15,7 +15,6 @@
            <span>人文景观</span>
            <span>场馆院所</span>
         </div>
-
         <div class="gallery w1000">
             <div class="prev"></div>
             <div class="next"></div>
@@ -24,34 +23,6 @@
                   <li class="gallery-item">
                       <img src="../imgs/scenic-1.jpg">
                       <p class="gallery-item-info">乌江画廊景区</p>
-                  </li>
-                  <li class="gallery-item">
-                      <img src="../imgs/scenic-2.jpg">
-                      <p class="gallery-item-info">沙洲城市农业公园</p>
-                  </li>
-                  <li class="gallery-item">
-                      <img src="../imgs/scenic-3.jpg">
-                      <p class="gallery-item-info">沙子南庄</p>
-                  </li>
-                  <li class="gallery-item">
-                      <img src="../imgs/scenic-4.jpg">
-                      <p class="gallery-item-info">乌江霸王谷</p>
-                  </li>
-                  <li class="gallery-item">
-                      <img src="../imgs/scenic-5.jpg">
-                      <p class="gallery-item-info">乌江古纤道</p>
-                  </li>
-                  <li class="gallery-item">
-                      <img src="../imgs/scenic-6.jpg">
-                      <p class="gallery-item-info">麻阳河国家景区</p>
-                  </li>
-                  <li class="gallery-item">
-                      <img src="../imgs/scenic-7.jpg">
-                      <p class="gallery-item-info">沙子南庄村</p>
-                  </li>
-                  <li class="gallery-item">
-                      <img src="../imgs/scenic-8.jpg">
-                      <p class="gallery-item-info">黔东特区革命委员会</p>
                   </li>
                </ul>
             </div>
@@ -71,7 +42,7 @@
       picComponent.left = function () {
           var self = this;
           if (self.nowIndex > 0) {
-              self.blur();              
+              self.blur();
               self.nowIndex --;
               self.focus();
           }
@@ -90,7 +61,7 @@
              self.blur();
              self.nowIndex += 4;
              self.focus();
-          } 
+          }
       };
       picComponent.up = function () {
           var self = this;
@@ -98,25 +69,25 @@
              self.blur();
              self.nowIndex -= 4;
              self.focus();
-          } 
+          }
       };
       picComponent.href = function() {
 					var self = this;
 					if(0 == self.nowIndex) {
-							location.href = "./scenic.html" 
+							location.href = "./scenic.html"
 					}
       };
       picComponent.listen();
 
       page.regedit(picComponent);
-      
+
       function pageInit(){
       		picComponent.init();
 //        picComponent.aItems[0].className = "gallery-item gallery-item-active";
       }
       pageInit();
       Video.stop();
-     
+
     </script>
 </body>
 </html>

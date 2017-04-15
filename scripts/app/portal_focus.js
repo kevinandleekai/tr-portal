@@ -31,7 +31,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       var GLOBAL_CONFIG = {
           pageInitParam: {
              url: SERVER_PATH + action,
-             data: "{'parentId': "+parentId+", pageType:2, 'userNo': 'shangchaoshi'}",
+             data: "{'parentId': "+parentId+", 'pageType':2, 'userNo': 'shangchaoshi'}",
              success: function(data) {
                  data = eval('('+ data +')');
                  var resultCode = parseInt(data['resultCode'], 10);
@@ -54,9 +54,17 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       var lstCompt = null, pageNationCompt = null;
       function render(data, domNode) {
           domNode = domNode || getByClass('txt-list');
-          var tpl = '<li class="txt-list-item" data-plateid="{{plateId}}">{{plateTitle}}</li>';
+          var tpl = '<li class="txt-list-item" data-pageid="{{articleId}}" data-action={{action}}>{{title}}</li>';
           // 构建DOM节点
-          //createHtmlFactory(tpl, data, domNode);
+          createHtmlFactory(tpl, data, domNode);
+
+          var html = '';
+          for (var i = 0, len = data.length; i < len; i++) {
+              var imgSrc = PIC_PATH + data[i]['imageList'][0]['imageUrl'].replace('..', '');
+              html += '<img src='+imgSrc+' />';
+          }
+
+          getByClass('pic-list').innerHTML = html;
 
           var config = {
           	 nodes: getByClass('txt-list-item'),
@@ -69,16 +77,18 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
   	         	   this.handleDown(pageNationCompt);
   	         },
   	         href: function() {
-  	         	   var self = this,
-                 nowNode = self.aItems[self.nowIndex],
-                 plateId = nowNode.getAttribute('data-plateid');
-  	             if (plateId.length) {
-  	                location.href = './focusDesc.html?plateId=' + plateId;
+  	         	    var self = this,
+                     currDom = self.aItems[self.nowIndex],
+                     pageId = currDom.getAttribute('data-pageid');
+                     parentId = getParam('parentId'),
+                     action = currDom.getAttribute('data-action');
+  	             if (pageId && parentId && action) {
+  	                location.href = './focusDesc.html?pageId=' + pageId + '&parentId=' + parentId + '&userNo=shangchaoshi' + '&action=' + action;
   	             }
   	         }
           };
           // 创建组件对象
-          //lstCompt = createObjFactory(config);
+          lstCompt = createObjFactory(config);
       }
 
       var config = {
