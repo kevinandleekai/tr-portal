@@ -10,7 +10,6 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       util = util;
       component = component;
 
-
       var SERVER_PATH = global.SERVER_PATH;
 
       var createHtmlFactory =  component.createHtmlFactory;
@@ -52,7 +51,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       // 页面DOM结构渲染
       function render(data, domNode) {
           domNode = domNode || getByClass('common-list');
-          var tpl = '<div class="common-list-item" data-pageid={{articleId}} data-href={{bodyPath}}>{{title}}</div>';
+          var tpl = '<div class="common-list-item" data-pageid={{articleId}} data-action={{bodyPath}}>{{title}}</div>';
           // 构建DOM结构
           createHtmlFactory(tpl, data, domNode);
 
@@ -60,7 +59,34 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
           var config = {
               nodes: getByClass('common-list-item'),
               css: {borderColor: '#f90'},
-              oldStyle: {borderColor: '#110f7c'}
+              oldStyle: {borderColor: '#110f7c'},
+              up: function() {
+                  var self = this;
+                  if (self.nowIndex <= 0) return false;
+                  self.blur();
+                  self.nowIndex --;
+                  self.focus();
+              },
+              down: function() {
+                 var self = this;
+                 if (self.nowIndex < self.itemSize - 1) {
+                    self.blur();
+                    self.nowIndex ++;
+                    self.focus();
+                 } else {
+                    self.blur();
+                    self.showHighLight = false;
+                    pageNationCompt.show();
+                 }
+              },
+              href: function() {
+                  var self = this,
+                      currDom = self.aItems[self.nowIndex],
+                      pageId = currDom.getAttribute('data-pageid'),
+                      action = currDom.getAttribute('data-action');
+                  action = action.replace('..', '');
+                  location.href = '../../pages/tv/affairDesc_sb.html?pageId=' + pageId + '&action=' + action;
+              }
           };
           lstCompt = createObjFactory(config);
       }

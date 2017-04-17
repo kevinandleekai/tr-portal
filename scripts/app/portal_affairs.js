@@ -27,7 +27,6 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       var parentId = getParam('parentId');
       var action = getParam('action');
 
-
       //页面配置参数
       var GLOBAL_CONFIG = {
           pageInitParam: {

@@ -283,26 +283,15 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            this.handleLeft();
         },
         href: function() {
-             var self = this,
-             nowIndex = self.nowIndex,
-                 parentId = self.aItems[nowIndex].getAttribute('data-parentid');
-             if (self.nowIndex == 0) {
-                self.blur();
-                self.showHighLight = false;
-                location.href = './pages/tv/leader.html';
-             } else if (self.nowIndex == 1) {
-                self.blur();
-                self.showHighLight = false;
-                location.href = '../../pages/rural/custom.html?parentId=' + parentId;
-             }else if (self.nowIndex == 2) {
-                self.blur();
-                self.showHighLight = false;
-                location.href = '../../pages/rural/custom.html?parentId=' + parentId;
-             }  else if (self.nowIndex == 3) {
-                self.blur();
-                self.showHighLight = false;
-                location.href = './pages/affairs.html';
-             }
+            var self = this,
+                currDom = self.aItems[self.nowIndex],
+                mainHtml = currDom.getAttribute('data-mainhtml'),
+                parentId = currDom.getAttribute('data-parentid'),
+                action = currDom.getAttribute('data-action');
+            if (!mainHtml || !parentId || !action) return false;
+            self.blur();
+            self.showHighLight = false;
+            location.href = mainHtml + '?parentId=' + parentId + '&action=' + action;
         }
     });
   }
