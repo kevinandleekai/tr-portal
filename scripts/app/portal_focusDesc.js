@@ -20,6 +20,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       var url = '../../testData/focusDesc.json';
 
       var getByClass =  util.getByClass;
+      var id = util.id;
       var getClientInfo = util.getClientInfo;
       var getParam = util.getParam;
 
@@ -54,8 +55,11 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
                     url: SERVER_PATH + href,
                     method: 'get',
                     success: function(data) {
-                       var html = '<div class="focus-cont">'+data+'</div>';
-                       getByClass('focus-main').innerHTML = html;
+                        if (!data) {
+                            alert('没有数据');
+                            return false;
+                        }
+                        id('common-article-body').innerHTML = html;
                     }
                  };
                  ajax(config);

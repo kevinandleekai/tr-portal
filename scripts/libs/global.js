@@ -1,16 +1,15 @@
 // 本文件定义一些常见的公共函数及变量, 也可以将里面的发放放到util.js模块里面去
-//cookie设置
 define(function(){
      //var PIC_PATH = 'http://192.168.38.47:8090/gportal/';   // 图片地址
-     var PIC_PATH = 'http://192.168.1.105:8090/gportal/';   // 图片地址
+     var PIC_PATH = 'http://192.168.1.101:8090/gportal/';   // 图片地址
      //var SERVER_PATH = 'http://192.168.38.47:8090/gportal/';  // 远程请求数据地址
-    var SERVER_PATH = 'http://192.168.1.105:8090/gportal/';  // 远程请求数据地址
+    var SERVER_PATH = 'http://192.168.1.101:8090/gportal/';  // 远程请求数据地址
 
     var SysSetting = {
     "setEnv":function(key,value){
-      var cookieString = key + "=" + escape(value);
-      document.cookie = cookieString;
-      },
+        var cookieString = key + "=" + escape(value);
+        document.cookie = cookieString;
+    },
     "getEnv":function(key){
       var arrCookie = unescape(document.cookie.split(';'));
           for(var i = 0; i < arrCookie.length; i++){

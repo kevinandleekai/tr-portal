@@ -10,7 +10,6 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       myajax = myajax;
       util = util;
       component = component;
-
       var getParam = util.getParam;
       var ajax = myajax.ajax;
 

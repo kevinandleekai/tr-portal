@@ -50,14 +50,14 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
 
       // 页面DOM结构渲染
       function render(data, domNode) {
-          domNode = domNode || getByClass('common-list');
-          var tpl = '<div class="common-list-item" data-pageid={{articleId}} data-action={{bodyPath}}>{{title}}</div>';
+          domNode = domNode || getByClass('common-article-list');
+          var tpl = '<div class="common-article-item" data-pageid={{articleId}} data-action={{bodyPath}}>{{title}}</div>';
           // 构建DOM结构
           createHtmlFactory(tpl, data, domNode);
 
           //组装组件
           var config = {
-              nodes: getByClass('common-list-item'),
+              nodes: getByClass('common-article-item'),
               css: {borderColor: '#f90'},
               oldStyle: {borderColor: '#110f7c'},
               up: function() {

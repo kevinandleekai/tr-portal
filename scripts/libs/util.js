@@ -115,10 +115,11 @@ define(function(){
      */
     var getClientInfo = function() {
         try {
-            var CA = CA || {};
+            var smartNo = Utility.getSystemInfo("SID"),
+                reginCode = Utility.getSystemInfo("ARC");
             return {
-              "smartNo": CA.icNo,
-              "reginCode": CA.regionCode || '22'
+              "smartNo": smartNo,
+              "reginCode": reginCode
             };
         } catch (exp) {
             alert("错误消息为:" + exp);

@@ -46,7 +46,7 @@ $top_height: 96px;
 $font_weight: 500;
 $font30: 30px;
 $white: #fff;
-/*头部*/
+/*脥路虏驴*/
 .header {
    padding-top: 10px;
    padding-bottom: 10px;
@@ -92,7 +92,7 @@ $white: #fff;
    }
 }
 
-/* start 导航部分*/
+/* start 碌录潞陆虏驴路脰*/
 .navbar {
    padding-bottom: 10px;
    overflow: hidden;
@@ -107,17 +107,15 @@ $white: #fff;
       font-weight: $font_weight;
    }
 }
-/* end 导航部分*/
+/* end 碌录潞陆虏驴路脰*/
 
-/* start 中间主体部分 */
+/* start 脰脨录盲脰梅脤氓虏驴路脰 */
 $main-height: 450px;
 $service-width: 300px;
 .middle {
    position: relative;
    height: $main-height;
    margin-bottom: 20px;
-   /* padding-left: 20px;
-   padding-right: 20px; */
    .middle-video {
       height: $main-height;
       position: absolute;
@@ -270,7 +268,7 @@ $service-width: 300px;
 
 
 }
-/* end 中间主体部分 */
+/* end 脰脨录盲脰梅脤氓虏驴路脰 */
 
 
 .detail-title {
@@ -612,65 +610,6 @@ $service-width: 300px;
     }
 
 }
-
-.content{
-    width:100%;
-    margin: 80px 0px 80px 0px;
-    color: #fff;
-    .content-pic{
-        display:inline;
-        position:relative;
-        width:50%;
-        height: $main-height;
-        text-align: center;
-        .scenic-pic-ul{
-            margin-right: 20px;
-            margin-left: 20px;
-            .scenic-pic-li {
-                margin-bottom:10px;
-                display:inline;
-            }
-        }
-    }
-    .bus-pic {
-        position:relative;
-        width:100%;
-        img{
-            width: 161px;
-            height: 150px;
-        }
-    }
-    .content-desc{
-        display:inline;
-        postion:relative;
-        width:100%;
-        height:$main-height;
-        text-align: left;
-        .content-desc-wrap {
-            margin:20px;
-            padding:0px 20 0px 20px;
-            p {
-                text-indent: 35px;
-                p {
-                    text-indent: 70px
-                }
-            }
-            .content-classify {
-               font-size: 20px;
-               padding-bottom: 10px;
-            }
-            .content-cont {
-               border:3px solid #cd7f3d;
-               font-size: 18px;
-               color:#fff;
-               border-radius: 5px;
-               height: 130px;
-               overflow: auto;
-               background-color: #1D3559;
-            }
-        }
-    }
-}
 .content-cont100 {
    font-size: 18px;
    color:#fff;
@@ -812,16 +751,83 @@ $service-width: 300px;
    height: 200px;
    background-color: #f90;
 }
-// 通用列表
-.common-list {
-
+.notice, .notice-footer {
+    width: 900px;
+    margin: 0 auto;
+    overflow: hidden;
 }
-.common-list-item {
-    padding-left: 20px;
-    height: 40px;
-    line-height: 40px;
-    font-size: 16px;
-    border: 5px solid #110f7c;
-    background-color: #2a59a9;
+.notice {
+    height: 400px;
+    overflow: hidden;
+}
+.notice-footer {
+    margin-top: 10px;
+}
+.notice-pic, .notice-article {
+    width: 400px;
+    height: 100%;
+}
+.notice-pic {
+    background-color: #ccc;
+}
+.notice-article {
+   background-color: #00f;
+}
+// 閫氱敤鍥剧墖鍒楄〃閮ㄥ垎
+.common-pic-list {
+    .common-pic-item {
+        height: 200px;
+        margin-bottom: 10px;
+    }
+    .common-pic-imgbox {
+        height: 100%;
+        background-color: #f00;
+    }
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+}
+// 閫氱敤鏂囩珷鍒楄〃閮ㄥ垎
+.common-title {
     color: #fff;
+    font-size: 25px;
+    margin: 30px auto 15px auto;
+}
+.farmer {
+    margin-bottom: 10px;
+}
+.farmer,  .farmer-footer{
+    width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+}
+.farmer-article {
+    width: 400px;
+    height: 400px;
+    background-color: #ccc;
+}
+.common-article-list {
+    .common-article-item {
+        padding-left: 20px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 16px;
+        border: 5px solid #110f7c;
+        background-color: #2a59a9;
+        color: #fff;
+    }
+}
+.common-article-cont {
+   height: 400px;
+   background-color: #143D6B;
+   overflow: hidden;
+}
+.common-article-body {
+    padding: 20px 20px;
+    color: #fff;
+    font-size: 18px;
+    text-indent: 40px;
 }

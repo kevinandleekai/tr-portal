@@ -19,6 +19,8 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
       var getClientInfo = util.getClientInfo;
       var getParam = util.getParam;
 
+      var id = util.id;
+
       // 需要发送请求的参数
       var pageId = getParam('pageId');
       var parentId = getParam('parentId');
@@ -36,8 +38,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
                     alert('没有数据！');
                     return false;
                  }
-                 var html = '<div class="focus-cont">'+data+'</div>';
-                 getByClass('focus-main').innerHTML = html;
+                 id('common-article-body').innerHTML = data;
              }
           }
       };
