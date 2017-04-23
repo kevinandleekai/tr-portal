@@ -1,9 +1,21 @@
 // 本文件定义一些常见的公共函数及变量, 也可以将里面的发放放到util.js模块里面去
 define(function(){
-     //var PIC_PATH = 'http://192.168.38.47:8090/gportal/';   // 图片地址
-     var PIC_PATH = 'http://192.168.1.101:8090/gportal/';   // 图片地址
+    //var PIC_PATH = 'http://192.168.38.47:8090/gportal/';   // 图片地址
+     //var PIC_PATH = 'http://192.168.1.101:8090/gportal/';   // 图片地址
      //var SERVER_PATH = 'http://192.168.38.47:8090/gportal/';  // 远程请求数据地址
-    var SERVER_PATH = 'http://192.168.1.101:8090/gportal/';  // 远程请求数据地址
+     //var SERVER_PATH = 'http://192.168.1.101:8090/gportal/';  // 远程请求数据地址
+    var VOD_PATH = "http://10.2.4.60:8080";
+
+    //var SERVER_PATH = 'http://10.2.4.3:8090/gportal/';
+    //var PIC_PATH = 'http://10.2.4.3:8090/gportal/';
+    //var SERVER_PATH = 'http://192.168.1.104:8090/gportal/';
+    //var SERVER_PATH = 'http://192.168.1.104:8090/gportal/';
+    var PIC_PATH = 'http://10.2.4.4:8090/gportal/';
+    var SERVER_PATH = 'http://10.2.4.4:8090/gportal/';
+
+    var PAGESIZE = 8;   // 每一页数据最大的条目
+    var STARTPAGE = 1;  // 当前页码
+    var G_NAVDATA = null;  // 存储GetPlateList请求回来的所有导航块数据,
 
     var SysSetting = {
     "setEnv":function(key,value){
@@ -52,6 +64,10 @@ define(function(){
       SysSetting: SysSetting,
       DataAccess: DataAccess,
       PIC_PATH: PIC_PATH,
-      SERVER_PATH: SERVER_PATH
+      SERVER_PATH: SERVER_PATH,
+      PAGESIZE : PAGESIZE,
+      STARTPAGE : STARTPAGE,
+      VOD_PATH: VOD_PATH,
+      G_NAVDATA: G_NAVDATA
   };
 })

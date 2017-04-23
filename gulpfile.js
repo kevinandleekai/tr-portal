@@ -20,17 +20,17 @@ gulp.task("scss", function(){
 //静态服务器
 gulp.task("browser-sync", function(){
     browserSync.init({
-       server: "./"
+       server: "./pages"
     });
     //监听scss文件和html文件的变化
     gulp.watch("./scss/*.scss", ["scss"]);
     gulp.watch("./pages/*.html").on("change", reload);
 });
-/*//压缩、重命名JS
+//压缩、重命名JS
 gulp.task('minifyjs', function () {
-    return gulp.src('src/libs/*.js')      //需要操作的文件
+    return gulp.src('scripts/*.js')      //需要操作的文件
         .pipe(uglify())    //压缩
-        .pipe(gulp.dest('src/libs'));       //输出到文件夹
-});*/
+        .pipe(gulp.dest('dest/js'));       //输出到文件夹
+});
 gulp.task("default", ["browser-sync"]);
 

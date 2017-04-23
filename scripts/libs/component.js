@@ -14,13 +14,14 @@ define(['util', 'JAlex', 'keyDefine'], function(util, JAlex, keyDefine){
 
     var Component = function(opts) {
         this.nodes = opts.nodes;  //DOM节点列表
-        this.iCss = opts.css || {};  //用户自定义css样式
+        this.iCss = opts.css || {backgroundColor: '#ff0'};  //用户自定义css样式
         this.oldStyle = opts.oldStyle || null; //DOM之前的样式, 本来是不用的, 但是后面重置元素样式为之前的样式时,会出现问题
         this.aItems = opts.nodes,
         this.itemSize = opts.nodes.length;
         this.nowIndex = 0;
         this.showHighLight = false;
         this.data = opts.data || [];
+        this.clearStyle = opts.clearStyle || true;  // 用于标识失去焦点时，是否要清除已添加的样式
     };
     Component.prototype = {
         constructor: Component,

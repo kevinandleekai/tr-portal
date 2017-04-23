@@ -110,16 +110,27 @@ define(function(){
     };
 
     /**
-     * [getClientInfo 获取机顶盒智能卡号, 区域码]
-     * @return {[Object]} [description]
+     * [定时获取获取机顶盒智能卡号, 区域码]
+     * @param  {[Number]}   num      [循环获取智能卡号,区域码次数]
+     * @param  {Function} callback [循环成功之后的回调函数]
+     * @return {[Object]}            [包含智能卡号和区域码对象]
      */
-    var getClientInfo = function() {
+    var getClientInfo = function(num, callback) {
+        var smartNo,
+            reginCode,
+            Utility = Utility || null;
+        if (!Utility) {
+           return {
+              smartNo: null,
+              reginCode: null
+           };
+        }
         try {
-            var smartNo = Utility.getSystemInfo("SID"),
-                reginCode = Utility.getSystemInfo("ARC");
+            smartNo = Utility.getSystemInfo("SID"),
+            reginCode = Utility.getSystemInfo("ARC");
             return {
-              "smartNo": smartNo,
-              "reginCode": reginCode
+                smartNo: smartNo,
+                reginCode: reginCode
             };
         } catch (exp) {
             alert("错误消息为:" + exp);

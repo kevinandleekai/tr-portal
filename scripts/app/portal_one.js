@@ -10,25 +10,30 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
         id = util.id,  // 根据id来获取元素
         ajax = myajax.ajax,   // ajax 请求通用函数
         createObjFactory = component.createObjFactory,
-        PIC_PATH = global.PIC_PATH,    // 图片地址
         page = JAlex.page,
         addClass = util.addClass,  // 为dom元素添加class
-
-        ALL_DATAS = null,   // 引用第一次请求时, 返回回来的所有数据。
-        SERVER_PATH = global.SERVER_PATH,
-        navbarCompt = null,
-        lstCompt = null,
+        getParam = util.getParam,
         getClientInfo = util.getClientInfo,
 
+        PIC_PATH = global.PIC_PATH,    // 图片地址
+        SERVER_PATH = global.SERVER_PATH,
+
+        navbarCompt = null,
+        lstCompt = null,
+
+        action = getParam('action'),
+        showOrder = getParam('showOrder'),
+        parentId = getParam('parentId'),
+        ALL_DATAS = null,    // 存储请求回来的所有数据
         smartNo = getClientInfo()['smartNo'],
         smartNo = smartNo || 'shangcaoshi',
         //全局页面配置参数
         GLOBAL_CONFIG = {
             pageInitParam: {
-                url: SERVER_PATH + 'GetPlateList.action',
+                url: SERVER_PATH + action,
                 /*url: './testData/index.json',*/
                 /*method: 'get',*/
-                data: "{'userNo': '"+smartNo+"'}",
+                data: "{'userNo': '"+smartNo+"', 'parentId': '"+parentId+"'}",
                 success: function(data) {
                     data = eval('('+ data +')');
                     var resultCode = parseInt(data['resultCode'], 10);
@@ -44,7 +49,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
                         return false;
                     }
                     // 填充导航条数据
-                    fillNavbarData(id('navbar'), ALL_DATAS);
+                    fillNavbarData(id('navbar'), ALL_DATAS[0]);
 
                     // 填充对应子版块的数据
                     fillSubModuleData(GLOBAL_CONFIG.serviceItem, ALL_DATAS[0]);
@@ -56,19 +61,18 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
             serviceItem: getByClass('service-item')
         };
 
-
     //填充导航数据
     function fillNavbarData(domNode, data) {
         domNode = domNode || null;
-        data = data || null;
-        if (!domNode || !data) return false;
+        data = data['topColumnInfo'] || null;
+        if (!domNode || !data.length) return false;
         var navItems = domNode.children;
-
         // 填充数据
         for (var i = 0, len = data.length; i < len; i++) {
             var currNode = navItems[i];
             currNode.innerHTML = data[i]['columnTitle'];
             addClass(currNode, 'navbar-item-div');
+
             currNode.setAttribute('data-mainHtml', data[i]['mainHtml']);
             currNode.setAttribute('data-showorder', data[i]['showOrder']);
             currNode.setAttribute('data-action', data[i]['action']);
@@ -77,35 +81,53 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
 
         // 进行组件构建
         var config = {
-            nodes: getByClass('navbar-item-div'),
-            css: {color: '#fd7f04'},
-            right: function() {
-               this.handleRight();
-            },
-            left: function() {
+           nodes: getByClass('navbar-item-div'),
+           css: {color: '#fd7f04'},
+           right: function() {
+               var self = this;
+               // this.handleRight();
+               if (self.nowIndex < self.itemSize - 1) {
+                  self.blur();
+                  self.nowIndex ++;
+                  self.focus();
+               } else {
+                  self.blur();
+                  self.nowIndex = 0;
+                  self.focus();
+               }
+           },
+           left: function() {
                this.handleLeft();
-            },
-            down: function() {
-              var self = this;
-              if (!lstCompt) return false;
-              lstCompt.show();
-              self.blur();
-              self.showHighLight = false;
-            },
-            href: function() {
-                var self = this,
-                    currDom = self.aItems[self.nowIndex],
-                    linkAddr = currDom.getAttribute('data-mainhtml'),
-                    showOrder = currDom.getAttribute('data-showorder'),
-                    action = currDom.getAttribute('data-action'),
-                    parentId = currDom.getAttribute('data-columnno');
-                if (linkAddr) {
-                   location.href = linkAddr + '?showOrder=' + showOrder + '&action=' + action + '&parentId=' + parentId;
-                }
-            }
+           },
+           down: function() {
+               var self = this;
+               if (!lstCompt) return false;
+               lstCompt.show();
+               self.blur();
+               self.showHighLight = false;
+           },
+           href: function() {
+            /*currNode.setAttribute('data-mainHtml', data[i]['mainHtml']);
+            currNode.setAttribute('data-showorder', data[i]['showOrder']);
+            currNode.setAttribute('data-action', data[i]['action']);
+            currNode.setAttribute('data-columnno', data[i]['columnNo']);*/
+              var self = this,
+                  currDom = self.aItems[self.nowIndex],
+                  linkAddr = currDom.getAttribute('data-mainhtml'),
+                  showOrder = currDom.getAttribute('data-showorder'),
+                  action = currDom.getAttribute('data-action'),
+                  parentId = currDom.getAttribute('data-columnno');
+              linkAddr && (location.href = linkAddr + '?showOrder=' + showOrder + '&action=' + action + '&parentId=' + parentId);
+
+           }
         };
         navbarCompt = createObjFactory(config);
-        navbarCompt.init();
+        if (showOrder) {
+            showOrder = showOrder - 1;
+        } else {
+            showOrder = 0;
+        }
+        navbarCompt.init(showOrder);
     }
     /**
      * @param {[node 要追加内容的节点]}
@@ -158,21 +180,8 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
                     linkHref = currDom.getAttribute('data-mainHtml'),
                     parentId = currDom.getAttribute('data-parentid');
                     action = currDom.getAttribute('data-action');
-
-                /*if (!linkHref) return false;
-                self.blur();
-                self.showHighLight = false;
-                // 跳转到对应的页面, 懒得加密参数值
-                location.linkHref = linkHref + '?parentId=' + parentId + '&action=' + action;*/
-                if (self.nowIndex === 0) {
-                    location.href = '../pages/leader.html';
-                } else if (self.nowIndex === 1) {
-                    location.href = '../pages/picAndList.html';
-                } else if (self.nowIndex === 2) {
-                    location.href = '../pages/picAndDesc.html';
-                } else if (self.nowIndex === 3) {
-                    location.href = '../pages/picAndGrid.html';
-                }
+                if (!linkHref) return;
+                location.href = linkHref + '?action=' + action + '&parentId='+parentId;
             }
         };
         lstCompt = createObjFactory(config);
@@ -195,12 +204,6 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
     }
     // 页面初始化开始
     function pageInit() {
-        /*var smartNo = getClientInfo().smartNo;
-        if (smartNo) {
-            ajax(GLOBAL_CONFIG.pageInitParam);
-        } else {
-            location.href = './error.html';
-        }*/
         ajax(GLOBAL_CONFIG.pageInitParam);
     }
     pageInit();
