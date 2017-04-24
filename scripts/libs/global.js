@@ -13,8 +13,8 @@ define(function(){
     var PIC_PATH = 'http://10.2.4.4:8090/gportal/';
     var SERVER_PATH = 'http://10.2.4.4:8090/gportal/';
 
-    var PAGESIZE = 8;   // 每一页数据最大的条目
-    var STARTPAGE = 1;  // 当前页码
+    /*var PAGESIZE = 8;   // 每一页数据最大的条目
+    var STARTPAGE = 1;  // 当前页码*/
     var G_NAVDATA = null;  // 存储GetPlateList请求回来的所有导航块数据,
 
     var SysSetting = {
@@ -65,8 +65,8 @@ define(function(){
       DataAccess: DataAccess,
       PIC_PATH: PIC_PATH,
       SERVER_PATH: SERVER_PATH,
-      PAGESIZE : PAGESIZE,
-      STARTPAGE : STARTPAGE,
+/*      PAGESIZE : PAGESIZE,
+      STARTPAGE : STARTPAGE,*/
       VOD_PATH: VOD_PATH,
       G_NAVDATA: G_NAVDATA
   };

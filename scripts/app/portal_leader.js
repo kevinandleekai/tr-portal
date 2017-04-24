@@ -41,7 +41,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
                           return false;
                       }
                       // 填充列表的数据
-                      //fillListData(columnList[0]);
+                      fillListData(columnList[0]);
                   }
               },
               // 列表项
@@ -49,12 +49,21 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
           };
 
       function fillListData(data) {
-
+          var columnList = data['columnList'],
+              i = 0,
+              len = columnList.length,
+              currDom = null,
+              childImg = null;
+          if (!len) return false;
+          for (; i < len; i++) {
+              currDom = GLOBAL_CONFIG.serviceItem[i];
+              childImg = currDom.getElementsByTagName('img')[0];
+              childImg.src = PIC_PATH + columnList[i]['columnCover'].replace('..', '');
+          }
       }
 
       // 页面初始操作
       function pageInit() {
-          //创建组件
           var config = {
               nodes: getByClass('pagenation-btn'),
               css: {backgroundColor: '#f60'},
@@ -66,7 +75,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
               },
               href: function() {
                   var self = this;
-                  history.go(-1);
+                  alert(self.nowIndex);
               }
           };
           pageNationCompt = createObjFactory(config);
@@ -74,5 +83,6 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
 
           ajax(GLOBAL_CONFIG.pageInitParam);
       }
+      pageInit();
 
 });

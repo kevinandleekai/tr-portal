@@ -72,7 +72,7 @@ var vdo = {
 		_toPagePlay: function(url){
 			window.location.href = "play.html?playUrl=" + url;
 		},
-		
+
 		/**暂停/播放**/
 		_pause: function(){
 			 var oMask = document.getElementById("mask");
@@ -82,14 +82,14 @@ var vdo = {
                 if(oMask!=null){
 					oMask.style.display = "block";
 				}
-				
+
             }else{
                 vdo.video.play();
                 vdo.status = 0;
                 if(oMask!=null){
 					oMask.style.display = "none";
 				}
-				
+
             }
 		},
 
@@ -102,7 +102,7 @@ var vdo = {
             history.go(-1);
 
 		},
-		
+
 		/**调节音量**/
         _volumn: function(value){
 			 var volume = parseInt(DataAccess.getInfo("MediaSetting", "OutputVolumn"));
@@ -123,14 +123,14 @@ var vdo = {
               }
              var  oVolumnBar = document.getElementById("volumn-bar");
              if(oVolumnBar!=null){
-				 clearTimeout(vdo.iTimer);            
+				 clearTimeout(vdo.iTimer);
                var  oVolumnBar = document.getElementById("volumn-bar"),
                   oVolumnPercent = document.getElementById("volumn-percent"),
-                  oVolumnNumber = document.getElementById("volumn-number");          
+                  oVolumnNumber = document.getElementById("volumn-number");
              if (vdo.volumnBarStatus === "hide") {
                 oVolumnBar.style.display = "block";
                 vdo.volumnBarStatus = "show";
-              }                         
+              }
             oVolumnPercent.style.width = volume * 10 + "px";
             oVolumnNumber.innerHTML = volume;
 			 vdo.iTimer = setTimeout(function () {
@@ -138,12 +138,12 @@ var vdo = {
                 vdo.volumnBarStatus = "hide";
             }, 5 * 1000);
 			 }
-             
+
             DataAccess.setInfo("MediaSetting", "OutputVolumn", volume);
             setCookie("volumNO",volume);
-           
+
 		},
-		
+
 		/**快进**/
 		_forward: function(){
             vdo.video.refresh();
@@ -157,7 +157,7 @@ var vdo = {
             vdo.video.point = time;
             vdo.video.refresh();
 		},
-		
+
 		/**快退**/
 		_rewind: function(){
             vdo.video.refresh();
@@ -170,13 +170,13 @@ var vdo = {
             vdo.video.point = time;
             vdo.video.refresh();
 		},
-		
+
 		/**重播**/
 		_repeat: function(){
             vdo.video.point = 1 ;
             vdo.video.refresh();
         },
-		
+
 		/**原伴唱切换**/
 		_soundTrack: function(){
             if(vdo.track == 1){
@@ -187,7 +187,7 @@ var vdo = {
                 vdo.track = 1;
             }
 		},
-		
+
 		/**捕捉按键事件**/
 		_key: function(event){
           var evtCode = event.which;
@@ -237,13 +237,13 @@ var vdo = {
                       //视频播放完毕
                       //setTimeout(function(){vdo._nextSong()}, 5000);
                       vdo._nextSong()
-                    } 
+                    }
               }else if(evtCode === 10935){
               	    if(vdo.svideo != 0){
               	    	setTimeout(function(){vdo._repeat()}, 5000);
               	    }
               }
-              
+
 
           }
         },
@@ -259,12 +259,12 @@ var vdo = {
               }
          //   alert(evtType);
 		},
-		
+
 		/**按键退出**/
 		_keyStop: function(){
 				if(vdo.video!=null){
 					vdo._stop();
-				}else{ 
+				}else{
 					history.go(-1);
 				}
 				var xmlhttp = new XMLHttpRequest();
@@ -275,12 +275,10 @@ var vdo = {
 				url = vdo.serverUrl+"/KeyStop?smartNo="+ vdo.smartNo;
 				xmlhttp.open("POST", url, true);
 				xmlhttp.send(null);
-			
-				
 		},
-		
-		
-		
+
+
+
 		/**切歌**/
 		_nextSong:function(){
 				var xmlhttp = new XMLHttpRequest();
@@ -304,7 +302,7 @@ var vdo = {
                     }
 				};
 		},
-		
+
 		/**小视频**/
 		_smallVideoPlay: function(position){
 				var xmlhttp = new XMLHttpRequest(),
@@ -327,7 +325,7 @@ var vdo = {
                             MyMediaPlayer.play();
                             vdo.video = MyMediaPlayer;
 							xmlhttp = null;
-						} 
+						}
 					}
 				};
 				//url = vdo.serverUrl+"/NextSong?smartNo="+ vdo.smartNo;
@@ -335,18 +333,18 @@ var vdo = {
 				xmlhttp.open("POST", url, true);
 				xmlhttp.send(null);
 		},
-		
+
 		/**从一个时间点播放**/
 		_drag: function(range){
 			 vdo.video.playByTime(1,range,0);
 		},
-		
-		_listen: function(){		
+
+		_listen: function(){
 			if(getCookie("volumNO") !=null){
 				setCookie("volumNO",16);
 				DataAccess.setInfo("MediaSetting", "OutputVolumn", 16);
 			}
-			
+
 		    document.onkeypress = function(event) {
                 vdo._key(event);
             };
@@ -354,7 +352,7 @@ var vdo = {
                 vdo._key(event);
             };
             /*document.onkeyup = function(event){
-            	
+
             };*/
             /**  **/
             window.onunload=function(){

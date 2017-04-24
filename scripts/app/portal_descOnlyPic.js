@@ -10,7 +10,9 @@ require(['global', 'myajax', 'util', 'autoScroll'], function(global, myajax, uti
         id = util.id,  // 根据id来获取元素
         ajax = myajax.ajax,   // ajax 请求通用函数
         getParam = util.getParam,
+        id = util.id,
         getByClass = util.getByClass,
+
         getClientInfo = util.getClientInfo,
 
         PIC_PATH = global.PIC_PATH,    // 图片地址
@@ -55,7 +57,12 @@ require(['global', 'myajax', 'util', 'autoScroll'], function(global, myajax, uti
     // 填充内容数据
     function fillContData(data) {
         GLOBAL_CONFIG.listTitle.innerHTML = data['pageTitle'];
-        id('article-img').src = PIC_PATH + data['imageList'][0]['imageUrl'].replace('..', '')
+        var imgList = data['imageList'];
+        if (!imgList.length) {
+            id('tooltip').style.display = 'block';
+            return false;
+        }
+        id('article-img').src = PIC_PATH + imgList[0]['imageUrl'].replace('..', '');
     }
     // 页面初始化开始
     function pageInit() {

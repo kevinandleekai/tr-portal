@@ -73,7 +73,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
             currNode.innerHTML = data[i]['columnTitle'];
             addClass(currNode, 'navbar-item-div');
 
-            currNode.setAttribute('data-mainHtml', data[i]['mainHtml']);
+            currNode.setAttribute('data-mainhtml', data[i]['mainHtml']);
             currNode.setAttribute('data-showorder', data[i]['showOrder']);
             currNode.setAttribute('data-action', data[i]['action']);
             currNode.setAttribute('data-columnno', data[i]['columnNo']);
@@ -84,17 +84,20 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
            nodes: getByClass('navbar-item-div'),
            css: {color: '#fd7f04'},
            right: function() {
-               var self = this;
-               // this.handleRight();
-               if (self.nowIndex < self.itemSize - 1) {
-                  self.blur();
-                  self.nowIndex ++;
-                  self.focus();
-               } else {
-                  self.blur();
-                  self.nowIndex = 0;
-                  self.focus();
-               }
+                var self = this;
+                if (self.nowIndex < self.itemSize - 1) {
+                    self.blur();
+                    self.nowIndex ++;
+                    self.focus();
+                    var currDom = self.aItems[self.nowIndex],
+                    linkAddr = currDom.getAttribute('data-mainhtml'),
+                    showOrder = currDom.getAttribute('data-showorder'),
+                    action = currDom.getAttribute('data-action'),
+                    parentId = currDom.getAttribute('data-columnno');
+                    if (linkAddr) {
+                       location.href = linkAddr + '?showOrder=' + showOrder + '&action=' + action + '&parentId=' + parentId;
+                    }
+                }
            },
            left: function() {
                this.handleLeft();
@@ -177,7 +180,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
             href: function() {
                 var self = this,
                     currDom = self.aItems[self.nowIndex],
-                    linkHref = currDom.getAttribute('data-mainHtml'),
+                    linkHref = currDom.getAttribute('data-mainhtml'),
                     parentId = currDom.getAttribute('data-parentid');
                     action = currDom.getAttribute('data-action');
                 if (!linkHref) return;
@@ -191,7 +194,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
         var len = node.length, currNode, i, oImg;
         for (i = 0; i < len; i++) {
             currNode = node[i];
-            currNode.setAttribute('data-mainHtml', data[i]['mainHtml']);
+            currNode.setAttribute('data-mainhtml', data[i]['mainHtml']);
             currNode.setAttribute('data-parentid', data[i]['columnNo']);
             currNode.setAttribute('data-action', data[i]['action']);
 

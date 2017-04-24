@@ -80,7 +80,20 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
             nodes: getByClass('navbar-item-div'),
             css: {color: '#fd7f04'},
             right: function() {
-               this.handleRight();
+                var self = this;
+                if (self.nowIndex < self.itemSize - 1) {
+                    self.blur();
+                    self.nowIndex ++;
+                    self.focus();
+                    var currDom = self.aItems[self.nowIndex],
+                    linkAddr = currDom.getAttribute('data-mainhtml'),
+                    showOrder = currDom.getAttribute('data-showorder'),
+                    action = currDom.getAttribute('data-action'),
+                    parentId = currDom.getAttribute('data-columnno');
+                    if (linkAddr) {
+                       location.href = linkAddr + '?showOrder=' + showOrder + '&action=' + action + '&parentId=' + parentId;
+                    }
+                }
             },
             left: function() {
                this.handleLeft();
@@ -91,7 +104,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
               lstCompt.show();
               self.blur();
               self.showHighLight = false;
-            },
+            }/*,
             href: function() {
                 var self = this,
                     currDom = self.aItems[self.nowIndex],
@@ -102,7 +115,7 @@ require(['keyDefine', 'global', 'JAlex', 'GKey', 'myajax', 'util', 'component'],
                 if (linkAddr) {
                    location.href = linkAddr + '?showOrder=' + showOrder + '&action=' + action + '&parentId=' + parentId;
                 }
-            }
+            }*/
         };
         navbarCompt = createObjFactory(config);
         navbarCompt.init();
